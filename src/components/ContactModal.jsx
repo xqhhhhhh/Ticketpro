@@ -46,22 +46,26 @@ export default function ContactModal({ product, type = 'wechat', onClose }) {
         <div className="qr-section">
           {isAlipay ? (
             <div className="qr-image-wrapper" style={{ margin: '0 auto 16px', display: 'flex', justifyContent: 'center' }}>
-              <img 
-                src="/alipay-qr.jpg" 
-                alt="支付宝收款码" 
-                style={{ width: '240px', height: 'auto', borderRadius: '12px', objectFit: 'cover' }} 
-              />
+              <a href="/alipay-qr.jpg" download="支付宝收款码.jpg" title="点击保存图片" style={{ textDecoration: 'none' }}>
+                <img 
+                  src="/alipay-qr.jpg" 
+                  alt="支付宝收款码" 
+                  style={{ width: '240px', height: 'auto', borderRadius: '12px', objectFit: 'cover', cursor: 'pointer' }} 
+                />
+              </a>
             </div>
           ) : (
             <div className="qr-image-wrapper" style={{ margin: '0 auto 16px', display: 'flex', justifyContent: 'center' }}>
-              <img 
-                src="/wechat-qr.jpg" 
-                alt="微信二维码" 
-                style={{ width: '240px', height: 'auto', borderRadius: '12px', objectFit: 'cover' }} 
-              />
+              <a href="/wechat-qr.jpg" download="微信客服二维码.jpg" title="点击保存图片" style={{ textDecoration: 'none' }}>
+                <img 
+                  src="/wechat-qr.jpg" 
+                  alt="微信二维码" 
+                  style={{ width: '240px', height: 'auto', borderRadius: '12px', objectFit: 'cover', cursor: 'pointer' }} 
+                />
+              </a>
             </div>
           )}
-          <p className="qr-hint">{isAlipay ? '打开支付宝扫一扫完成支付' : '长按或扫码添加客服微信'}</p>
+          <p className="qr-hint">{isAlipay ? '打开支付宝扫一扫（也可点击图片直接保存）' : '长按扫码添加，或点击图片直接保存'}</p>
         </div>
 
         {/* WeChat ID Copy (only for WeChat) */}

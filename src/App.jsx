@@ -232,11 +232,13 @@ function ContactSection() {
             transition={{ duration: 0.5 }}
           >
             <div className="contact-qr-slot" style={{ border: 'none', background: 'transparent', width: '240px', height: 'auto', padding: 0 }}>
-              <img 
-                src="/wechat-qr.jpg" 
-                alt="作者微信" 
-                style={{ width: '100%', height: 'auto', borderRadius: '12px', display: 'block' }} 
-              />
+              <a href="/wechat-qr.jpg" download="作者微信二维码.jpg" title="点击保存二维码" style={{ textDecoration: 'none' }}>
+                <img 
+                  src="/wechat-qr.jpg" 
+                  alt="作者微信" 
+                  style={{ width: '100%', height: 'auto', borderRadius: '12px', display: 'block', cursor: 'pointer' }} 
+                />
+              </a>
             </div>
             <h3 className="contact-card-label" style={{ marginBottom: '12px' }}>作者微信</h3>
             <p className="contact-card-sublabel" style={{ fontWeight: 600, color: 'var(--text-primary)', background: 'rgba(255,255,255,0.05)', padding: '6px 16px', borderRadius: '100px', display: 'inline-block' }}>
@@ -290,11 +292,13 @@ function Footer() {
           <div className="footer-col">
             <h4>客户支持</h4>
             <div className="footer-qr" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <img 
-                src="/wechat-qr.jpg" 
-                alt="作者微信二维码" 
-                style={{ width: '120px', height: 'auto', borderRadius: '8px' }} 
-              />
+              <a href="/wechat-qr.jpg" download="客服微信二维码.jpg" title="点击保存二维码" style={{ textDecoration: 'none' }}>
+                <img 
+                  src="/wechat-qr.jpg" 
+                  alt="作者微信二维码" 
+                  style={{ width: '120px', height: 'auto', borderRadius: '8px', cursor: 'pointer' }} 
+                />
+              </a>
               <span style={{ fontSize: '0.85rem', color: '#a1a1aa' }}>
                 <MessageCircle size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />
                 微信号：xxxxqqqhh
