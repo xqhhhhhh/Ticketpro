@@ -206,9 +206,7 @@ export default function ProductDetail({ onAction }) {
             >
               <video 
                 controls 
-                autoPlay
-                muted
-                loop
+                preload="metadata"
                 className="demo-video" 
                 style={{ 
                   width: '100%', 
@@ -218,7 +216,7 @@ export default function ProductDetail({ onAction }) {
                   boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
                 }}
               >
-                <source src={product.testimonialVideo} type="video/mp4" />
+                <source src={product.testimonialVideo} type={product.testimonialVideo.endsWith('.mov') ? 'video/quicktime' : 'video/mp4'} />
                 你的浏览器不支持播放此视频。
               </video>
             </motion.div>
