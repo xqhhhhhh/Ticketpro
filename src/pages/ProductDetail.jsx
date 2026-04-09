@@ -197,23 +197,23 @@ export default function ProductDetail({ onAction }) {
           </div>
           {product.testimonialVideo ? (
             <motion.div
-              className="testimonial-video-container"
+              className="video-container"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              style={{ maxWidth: '360px', margin: '0 auto' }} // Vertically oriented video
+              style={{ maxWidth: '800px', margin: '0 auto' }}
             >
               <video 
                 controls 
-                preload="metadata"
                 className="demo-video" 
                 style={{ 
                   width: '100%', 
-                  borderRadius: '16px', 
+                  aspectRatio: '16/9', 
+                  objectFit: 'contain', 
+                  borderRadius: '12px', 
                   border: `1px solid ${hexToRgba(product.color, 0.2)}`, 
-                  background: '#000',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
+                  background: '#000' 
                 }}
               >
                 <source src={product.testimonialVideo} type={product.testimonialVideo.endsWith('.mov') ? 'video/quicktime' : 'video/mp4'} />
