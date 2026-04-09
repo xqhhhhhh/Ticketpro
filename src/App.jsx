@@ -7,7 +7,29 @@ import ProductDetail from './pages/ProductDetail';
 import ContactModal from './components/ContactModal';
 import './App.css';
 
+import QRViewerModal from './components/QRViewerModal';
+
 const iconMap = { Zap, Shield, Globe, Headphones };
+
+function ClickableQR({ src, alt, style }) {
+  const [viewingQR, setViewingQR] = useState(false);
+  return (
+    <>
+      <div onClick={() => setViewingQR(true)} title="点击放大图片" style={{ cursor: 'zoom-in', display: 'inline-block' }}>
+        <img src={src} alt={alt} style={style} />
+      </div>
+      <AnimatePresence>
+        {viewingQR && (
+          <QRViewerModal 
+            src={src} 
+            alt={alt} 
+            onClose={() => setViewingQR(false)} 
+          />
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
 
 function hexToRgba(hex, alpha) {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -232,13 +254,11 @@ function ContactSection() {
             transition={{ duration: 0.5 }}
           >
             <div className="contact-qr-slot" style={{ border: 'none', background: 'transparent', width: '240px', height: 'auto', padding: 0 }}>
-              <a href="/wechat-qr.jpg" download="作者微信二维码.jpg" title="点击保存二维码" style={{ textDecoration: 'none' }}>
-                <img 
-                  src="/wechat-qr.jpg" 
-                  alt="作者微信" 
-                  style={{ width: '100%', height: 'auto', borderRadius: '12px', display: 'block', cursor: 'pointer' }} 
-                />
-              </a>
+              <ClickableQR 
+                src="/wechat-qr.jpg" 
+                alt="作者微信" 
+                style={{ width: '100%', height: 'auto', borderRadius: '12px', display: 'block' }} 
+              />
             </div>
             <h3 className="contact-card-label" style={{ marginBottom: '12px' }}>作者微信</h3>
             <p className="contact-card-sublabel" style={{ fontWeight: 600, color: 'var(--text-primary)', background: 'rgba(255,255,255,0.05)', padding: '6px 16px', borderRadius: '100px', display: 'inline-block' }}>
@@ -292,13 +312,11 @@ function Footer() {
           <div className="footer-col">
             <h4>客户支持</h4>
             <div className="footer-qr" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <a href="/wechat-qr.jpg" download="客服微信二维码.jpg" title="点击保存二维码" style={{ textDecoration: 'none' }}>
-                <img 
-                  src="/wechat-qr.jpg" 
-                  alt="作者微信二维码" 
-                  style={{ width: '120px', height: 'auto', borderRadius: '8px', cursor: 'pointer' }} 
-                />
-              </a>
+              <ClickableQR 
+                src="/wechat-qr.jpg" 
+                alt="作者微信二维码" 
+                style={{ width: '120px', height: 'auto', borderRadius: '8px' }} 
+              />
               <span style={{ fontSize: '0.85rem', color: '#a1a1aa' }}>
                 <MessageCircle size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />
                 微信号：xxxxqqqhh
