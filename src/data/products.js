@@ -219,6 +219,47 @@ export const products = [
     testimonialVideo: '/videos/interpark/testimonial.mp4',
   },
   {
+    id: 'ticketlink',
+    name: '韩国 Ticketlink 抢票捡漏插件',
+    shortName: 'Ticketlink',
+    description: '覆盖韩国 Ticketlink 公售与捡漏场景，支持自动刷新、精准选区、锁座提醒和一机一码授权。',
+    longDescription: '专为韩国 Ticketlink 打造的全自动抢票捡漏插件，覆盖热门演唱会、音乐剧及体育赛事等常见购票场景。插件支持公售高频抢票与 24 小时自动捡漏两种使用方式，可按区域、席位条件和刷新频率进行灵活配置，锁到票后通过浏览器声音、钉钉和 Telegram 多端提醒。采用前台模拟点击与一机一码授权机制，搭配详细安装教程和持续维护，适合需要长期稳定蹲守 Ticketlink 余票的用户。',
+    pricing: [
+      { label: '月付', duration: '1个月', price: 80 },
+      { label: '年付', duration: '1年', price: 128 },
+      { label: '买断', duration: '永久', price: 168 },
+    ],
+    currency: '¥',
+    features: ['韩国场次覆盖', '公售/捡漏双模式', '精确选区配置', '多端锁座提醒'],
+    badge: '新品',
+    color: '#ef4444',
+    logo: 'https://www.google.com/s2/favicons?domain=www.ticketlink.co.kr&sz=128',
+    videos: [],
+    highlights: [
+      {
+        title: 'Ticketlink 专属流程适配',
+        description: '围绕韩国 Ticketlink 的购票路径做针对性适配，从进入场次、刷新票池到尝试锁座都能自动衔接，减少手动切换页面与重复点击带来的失误。',
+        image: null,
+      },
+      {
+        title: '公售与捡漏双模式切换',
+        description: '开售瞬间可使用高频公售模式抢占先机，错过首轮也能切换为 24 小时捡漏巡航，持续捕捉退票和未付款释放出来的余票。',
+        image: null,
+      },
+      {
+        title: '精细化区域与席位配置',
+        description: '支持提前设置目标区域、席位偏好与刷新节奏，配置可根据实际票池变化灵活调整，让插件集中火力处理真正想要的位置。',
+        image: null,
+      },
+      {
+        title: '锁座提醒与专属维护',
+        description: '成功锁票后会通过电脑声音、钉钉和 Telegram 多端提醒，避免错过付款窗口。购买后提供激活码、使用教程和后续版本维护。',
+        image: null,
+      },
+    ],
+    testimonialVideo: '/videos/interpark/testimonial.mp4',
+  },
+  {
     id: 'cityline',
     name: 'Cityline 捡漏抢票插件',
     shortName: 'Cityline',
