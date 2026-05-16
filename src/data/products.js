@@ -234,7 +234,9 @@ export const products = [
     badge: '新品',
     color: '#ef4444',
     logo: 'https://www.google.com/s2/favicons?domain=www.ticketlink.co.kr&sz=128',
-    videos: [],
+    videos: [
+      '/videos/ticketlink/promo1.mp4'
+    ],
     highlights: [
       {
         title: 'Ticketlink 专属流程适配',
