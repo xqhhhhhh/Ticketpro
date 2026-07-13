@@ -231,7 +231,7 @@ export const products = [
     ],
     currency: '¥',
     features: ['韩国场次覆盖', '公售/捡漏双模式', '精确选区配置', '多端锁座提醒'],
-    badge: '新品',
+    badge: null,
     color: '#ef4444',
     logo: 'https://www.google.com/s2/favicons?domain=www.ticketlink.co.kr&sz=128',
     videos: [
@@ -274,7 +274,7 @@ export const products = [
     ],
     currency: '¥',
     features: ['泰国场次适配', '公售/捡漏双模式', '目标区域筛选', '多端锁票提醒'],
-    badge: '新品',
+    badge: null,
     color: '#0891b2',
     logo: 'https://www.google.com/s2/favicons?domain=www.thaiticketmajor.com&sz=128',
     videos: [],
@@ -315,9 +315,9 @@ export const products = [
     ],
     currency: '¥',
     features: ['香港快达适配', '自动刷新捡漏', '票档区域配置', '锁票即时通知'],
-    badge: '新品',
+    badge: null,
     color: '#dc2626',
-    logo: 'https://www.google.com/s2/favicons?domain=www.hkticketing.com&sz=128',
+    logo: '/logos/hkticketing.svg',
     videos: [],
     highlights: [
       {
@@ -356,7 +356,7 @@ export const products = [
     ],
     currency: '¥',
     features: ['拓元平台适配', '场次票档配置', '持续余票监控', '多端锁票提醒'],
-    badge: '新品',
+    badge: null,
     color: '#16a34a',
     logo: 'https://www.google.com/s2/favicons?domain=tixcraft.com&sz=128',
     videos: [],
