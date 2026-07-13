@@ -6,9 +6,9 @@ export const products = [
     description: '支持24小时不间断捡漏、多重验证码自动突破，以及钉钉/Telegram多端消息提醒，公售会员购通杀。',
     longDescription: '专为国际版 Interpark 打造的全自动捡漏抢票神器，无论是公售、预售还是会员购均可完美支持。不仅提供比人工快得多的24小时自动锁票功能，还自带多维度定制面板，支持实时热更配置（选区、位置、刷新频率等）。内置强大的防阻断机制，全自动秒解图文及滑块验证码。抢到票后更支持浏览器、钉钉和Telegram联动通知，让你睡着也能安心拿票。',
     pricing: [
-      { label: '月付', duration: '1个月', price: 80 },
-      { label: '年付', duration: '1年', price: 128 },
-      { label: '买断', duration: '永久', price: 168 },
+      { label: '月付', duration: '1个月', price: 88 },
+      { label: '年付', duration: '1年', price: 136 },
+      { label: '买断', duration: '永久', price: 188 },
     ],
     currency: '¥',
     features: ['24h 自动捡漏', '多端消息提醒', '全自动过滑块/验证码', '一机一码安全防盗'],
