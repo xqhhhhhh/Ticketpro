@@ -597,3 +597,88 @@
     padding: 28px;
   }
 }
+
+/* Products awaiting a price remain available for demos and enquiries. */
+.product-actions-grid.pending { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pricing-tiers.many-tiers { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.pricing-tiers.many-tiers .pricing-tier { min-width: 0; padding-inline: 2px; }
+.pricing-tiers.many-tiers .tier-amount { font-size: 1.15rem; }
+.demo-video-note {
+  max-width: 800px;
+  margin: 16px auto 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-align: center;
+}
+.product-screenshots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.product-screenshot-group:has(h3) { margin-top: 48px; }
+.product-screenshot-group h3 {
+  margin: 0 0 18px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+.product-screenshots a {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04);
+}
+.product-screenshots img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 700px) {
+  .product-screenshots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.price-pending {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  min-height: 100px;
+  margin-bottom: 20px;
+  padding: 18px;
+  border: 1px dashed var(--glass-border);
+  border-radius: var(--radius-lg);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.price-pending span {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.detail-price-pending { max-width: 640px; }
+.detail-purchase-actions {
+  display: flex;
+  gap: 16px;
+  margin: 16px 0 32px;
+}
+
+.buy-btn:disabled,
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.detail-hero-left > div:last-child { min-width: 0; }
+
+@media (max-width: 480px) {
+  .products-grid { grid-template-columns: minmax(0, 1fr); }
+  .detail-purchase-actions { flex-direction: column; }
+  .detail-pricing-tiers.many-tiers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .detail-pricing-tiers.many-tiers .detail-tier { min-width: 0; }
+}

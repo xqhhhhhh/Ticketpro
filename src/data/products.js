@@ -1,3 +1,5 @@
+import { newProducts } from './newProducts.js';
+
 export const products = [
   {
     id: 'interpark',
@@ -6,6 +8,7 @@ export const products = [
     description: '支持24小时不间断捡漏、多重验证码自动突破，以及钉钉/Telegram多端消息提醒，公售会员购通杀。',
     longDescription: '专为国际版 Interpark 打造的全自动捡漏抢票神器，无论是公售、预售还是会员购均可完美支持。不仅提供比人工快得多的24小时自动锁票功能，还自带多维度定制面板，支持实时热更配置（选区、位置、刷新频率等）。内置强大的防阻断机制，全自动秒解图文及滑块验证码。抢到票后更支持浏览器、钉钉和Telegram联动通知，让你睡着也能安心拿票。',
     pricing: [
+      { label: '半月', duration: '15天', price: 66 },
       { label: '月付', duration: '1个月', price: 88 },
       { label: '年付', duration: '1年', price: 136 },
       { label: '买断', duration: '永久', price: 188 },
@@ -15,11 +18,6 @@ export const products = [
     badge: null,
     color: '#6366f1',
     logo: 'https://www.google.com/s2/favicons?domain=ticket.interpark.com&sz=128',
-    // 本地宣传视频
-    videos: [
-      '/videos/interpark/promo1.mp4',
-      '/videos/interpark/promo2.mp4'
-    ],
     // 图文介绍
     highlights: [
       {
@@ -53,6 +51,7 @@ export const products = [
     description: '硬核独立开发，独家高级全自动捡漏神器。支持跨进程多开、无限循环验证、精确到行的毫秒级秒切。',
     longDescription: '这不仅仅是一套普通的脚本。从底层框架从零手搓的绝版全自动抢票神器，一人一码防止滥用，保障超高稀缺性并承诺绝对绿色防封号。实现真正的全流程解放双手：从自动接管极验验证、拦截异常报错弹窗，到底层级别的多维选区与防冲突无缝衔接。无论你抢的是国际版还是韩版，演唱会还是音乐剧，这套硬核代码都能成为你上岸的最强后盾。',
     pricing: [
+      { label: '半月', duration: '15天', price: 60 },
       { label: '月付', duration: '1个月', price: 80 },
       { label: '年付', duration: '1年', price: 128 },
       { label: '买断', duration: '永久', price: 168 },
@@ -62,9 +61,6 @@ export const products = [
     badge: null,
     color: '#10b981',
     logo: 'https://www.google.com/s2/favicons?domain=ticket.melon.com&sz=128',
-    videos: [
-      '/videos/melon/promo1.mp4'
-    ],
     highlights: [
       {
         title: '硬核级防冲突与报错拦截',
@@ -87,7 +83,6 @@ export const products = [
         image: null,
       },
     ],
-    testimonialVideo: '/videos/interpark/testimonial.mp4',
   },
   {
     id: 'yes24',
@@ -105,9 +100,6 @@ export const products = [
     badge: null,
     color: '#f59e0b',
     logo: 'https://www.google.com/s2/favicons?domain=ticket.yes24.com&sz=128',
-    videos: [
-      '/videos/yes24/promo1.mp4'
-    ],
     highlights: [
       {
         title: '智能降错流控核心',
@@ -130,7 +122,31 @@ export const products = [
         image: null,
       },
     ],
-    testimonialVideo: '/videos/interpark/testimonial.mp4',
+  },
+  {
+    id: 'yes24-kr',
+    name: '韩版 YES24 抢票插件',
+    shortName: '韩版 YES24',
+    description: '适配 YES24 韩文商品页，支持选场、选座及付款页提醒，使用独立的韩版激活码。',
+    longDescription: '韩版 YES24 是与国际版分别安装、分别激活的 Chrome 插件，适用于 YES24 韩文商品页。设置目标活动后，插件可进入商品页并点击预订入口，继续处理日期、场次和选座流程；到达付款页时提醒你接手，付款由你完成。韩版使用独立激活码，购买时请确认选择韩版。',
+    pricing: [
+      { label: '月付', duration: '1个月', price: 80 },
+      { label: '年付', duration: '1年', price: 128 },
+      { label: '买断', duration: '永久', price: 168 },
+    ],
+    currency: '¥',
+    features: ['韩文商品页适配', '日期与场次选择', '选座流程辅助', '独立韩版激活码'],
+    badge: '韩版',
+    color: '#d97706',
+    logo: 'https://www.google.com/s2/favicons?domain=ticket.yes24.com&sz=128',
+    videoSourceId: 'yes24',
+    videoNote: '此视频展示国际版 YES24；韩版购票界面与操作流程可能不同。',
+    highlights: [
+      { title: '韩文商品页专属版本', description: '韩版适配 YES24 的韩文商品页，并与国际版的商品链接和页面接管流程分别处理。' },
+      { title: '从商品页到选座', description: '设置目标链接后自动进入商品页，点击“예매하기”预订入口，再按目标日期和场次处理后续选座流程。' },
+      { title: '进入付款页提醒', description: '到达付款阶段时提醒你接手；个人资料核对及付款由用户自行完成。' },
+      { title: '独立安装与激活', description: '韩版和国际版的扩展及激活码相互独立。购买时请注明韩版，按韩版教程安装和激活。' },
+    ],
   },
   {
     id: 'interpark-kr',
@@ -148,9 +164,6 @@ export const products = [
     badge: null,
     color: '#ec4899',
     logo: 'https://www.google.com/s2/favicons?domain=ticket.interpark.com&sz=128',
-    videos: [
-      '/videos/korean-interpark/promo1.mp4'
-    ],
     highlights: [
       {
         title: '针对性突破平台白屏封锁',
@@ -173,7 +186,6 @@ export const products = [
         image: null,
       },
     ],
-    testimonialVideo: '/videos/interpark/testimonial.mp4',
   },
   {
     id: 'ticketmaster',
@@ -191,9 +203,6 @@ export const products = [
     badge: null,
     color: '#3b82f6',
     logo: 'https://www.google.com/s2/favicons?domain=www.ticketmaster.sg&sz=128',
-    videos: [
-      '/videos/ticketmaster/promo1.mp4'
-    ],
     highlights: [
       {
         title: '视觉大模型降维打击',
@@ -216,7 +225,6 @@ export const products = [
         image: null,
       },
     ],
-    testimonialVideo: '/videos/interpark/testimonial.mp4',
   },
   {
     id: 'ticketlink',
@@ -234,9 +242,6 @@ export const products = [
     badge: null,
     color: '#ef4444',
     logo: 'https://www.google.com/s2/favicons?domain=www.ticketlink.co.kr&sz=128',
-    videos: [
-      '/videos/ticketlink/promo1.mp4'
-    ],
     highlights: [
       {
         title: 'Ticketlink 专属流程适配',
@@ -259,7 +264,6 @@ export const products = [
         image: null,
       },
     ],
-    testimonialVideo: '/videos/interpark/testimonial.mp4',
   },
   {
     id: 'thaiticketmajor',
@@ -268,6 +272,7 @@ export const products = [
     description: '适配泰国 ThaiTicketMajor 热门演出，支持自动刷新、目标区域筛选、持续捡漏和锁票提醒。',
     longDescription: '专为泰国 ThaiTicketMajor 购票流程打造的自动抢票捡漏插件，覆盖热门演唱会、见面会及体育赛事等常见场景。插件支持开售阶段的快速操作和后续持续捡漏，可根据目标区域与票档进行灵活配置，并在运行过程中自动处理页面刷新与余票检查。成功锁票后可通过电脑声音及多端消息及时提醒，搭配一机一码授权、安装教程和持续维护，降低长时间手动守候的负担。',
     pricing: [
+      { label: '半月', duration: '15天', price: 60 },
       { label: '月付', duration: '1个月', price: 80 },
       { label: '年付', duration: '1年', price: 128 },
       { label: '买断', duration: '永久', price: 168 },
@@ -277,7 +282,6 @@ export const products = [
     badge: null,
     color: '#0891b2',
     logo: 'https://www.google.com/s2/favicons?domain=www.thaiticketmajor.com&sz=128',
-    videos: [],
     highlights: [
       {
         title: 'ThaiTicketMajor 专属适配',
@@ -300,7 +304,6 @@ export const products = [
         image: null,
       },
     ],
-    testimonialVideo: '/videos/interpark/testimonial.mp4',
   },
   {
     id: 'hkticketing',
@@ -318,7 +321,6 @@ export const products = [
     badge: null,
     color: '#dc2626',
     logo: '/logos/hkticketing.svg',
-    videos: [],
     highlights: [
       {
         title: '快达票务流程适配',
@@ -341,7 +343,6 @@ export const products = [
         image: null,
       },
     ],
-    testimonialVideo: '/videos/interpark/testimonial.mp4',
   },
   {
     id: 'tixcraft',
@@ -359,7 +360,6 @@ export const products = [
     badge: null,
     color: '#16a34a',
     logo: 'https://www.google.com/s2/favicons?domain=tixcraft.com&sz=128',
-    videos: [],
     highlights: [
       {
         title: '拓元购票流程自动化',
@@ -382,7 +382,6 @@ export const products = [
         image: null,
       },
     ],
-    testimonialVideo: '/videos/interpark/testimonial.mp4',
   },
   {
     id: 'cityline',
@@ -400,9 +399,6 @@ export const products = [
     badge: null,
     color: '#8b5cf6',
     logo: 'https://www.google.com/s2/favicons?domain=www.cityline.com&sz=128',
-    videos: [
-      '/videos/cityline/promo1.mp4'
-    ],
     highlights: [
       {
         title: '全自动无痛接管',
@@ -425,9 +421,13 @@ export const products = [
         image: null
       }
     ],
-    testimonialVideo: '/videos/interpark/testimonial.mp4',
   },
-];
+  ...newProducts,
+].filter((product) => product.visible !== false).map((product) => ({
+  ...product,
+  videos: product.noDemo ? [] : [`/videos/${product.videoSourceId ?? product.id}/latest.mp4`],
+  videoPoster: product.noDemo ? undefined : `/videos/${product.videoSourceId ?? product.id}/poster.jpg`,
+}));
 
 export const features = [
   {
@@ -455,7 +455,7 @@ export const features = [
 export const faqs = [
   {
     question: '购买后如何使用？',
-    answer: '购买成功后会发送激活码和详细使用教程。按照教程安装 Chrome 插件并输入激活码即可使用。',
+    answer: '购买后会提供对应商品的激活方式和使用教程。浏览器插件与桌面工具的安装步骤以各自教程为准。',
   },
   {
     question: '支持哪些支付方式？',
@@ -463,7 +463,7 @@ export const faqs = [
   },
   {
     question: '激活码可以用多久？',
-    answer: '激活码为永久有效，一次购买终身使用。后续更新免费。',
+    answer: '使用期限以所选商品及购买档位为准，具体价格和期限请查看商品详情或联系客服确认。',
   },
   {
     question: '如果遇到问题怎么办？',
@@ -475,6 +475,6 @@ export const faqs = [
   },
   {
     question: '一个激活码可以用在几台设备上？',
-    answer: '每个激活码支持在一台设备上使用。如果需要更换设备，请联系客服处理。',
+    answer: '不同商品和激活码类型的设备规则可能不同，请查看对应商品教程或联系客服确认。',
   },
 ];

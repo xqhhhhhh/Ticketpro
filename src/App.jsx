@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-do
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, Shield, Globe, Headphones, ArrowRight, Sparkles, MessageCircle, Check } from 'lucide-react';
 import { products, features } from './data/products';
+import { hasPricing } from './data/pricing';
 import ProductDetail from './pages/ProductDetail';
 import ContactModal from './components/ContactModal';
 import './App.css';
@@ -112,7 +113,7 @@ function ProductCard({ product, index, onAction }) {
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
-      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.6, delay: (index % 3) * 0.1, ease: [0.16, 1, 0.3, 1] }}
       style={{
         '--card-color': product.color,
         '--card-color-light': glowColor,
@@ -148,7 +149,7 @@ function ProductCard({ product, index, onAction }) {
         </div>
       </div>
       <div className="product-footer">
-        <div className="pricing-tiers">
+        {hasPricing(product) ? <div className={`pricing-tiers ${product.pricing.length > 3 ? 'many-tiers' : ''}`}>
           {product.pricing.map((tier, i) => (
             <div key={i} className={`pricing-tier ${tier.badge ? 'recommended' : ''}`}>
               {tier.badge && <span className="tier-badge">{tier.badge}</span>}
@@ -160,14 +161,16 @@ function ProductCard({ product, index, onAction }) {
               <span className="tier-duration">{tier.duration}</span>
             </div>
           ))}
-        </div>
-        <div className="product-actions-grid">
+        </div> : <div className="price-pending">价格待定<span>可联系客服了解商品</span></div>}
+        <div className={`product-actions-grid ${hasPricing(product) ? '' : 'pending'}`}>
           <Link to={`/product/${product.id}`} className="buy-btn" style={{ textDecoration: 'none', background: 'var(--glass-bg)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }}>
             查看详情
           </Link>
-          <button className="buy-btn" onClick={() => onAction(product, 'alipay')} style={{ background: '#1677ff', color: '#fff' }}>
-            立即购买
-          </button>
+          {hasPricing(product) && (
+            <button className="buy-btn" onClick={() => onAction(product, 'alipay')} style={{ background: '#1677ff', color: '#fff' }}>
+              立即购买
+            </button>
+          )}
           <button className="buy-btn" onClick={() => onAction(product, 'wechat')} style={{ background: '#07c160', color: '#fff' }}>
             联系我们
           </button>

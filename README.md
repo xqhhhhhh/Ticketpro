@@ -1,16 +1,21 @@
-# React + Vite
+# TicketPro 商品页面
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite 商品目录。演示视频取自 `/Users/xuqihan/Desktop/插件宣传/`，每个视频商品选用该目录中按文件修改时间排序的最新视频。韩版 YES24 按用户要求与国际版共用视频，并在详情页标注视频展示的是国际版。AllTicket 展示最新演示视频和原始界面截图。寬宏 KHAM 和金光票务 Cotai Ticketing 暂时隐藏，价格留待填写。视频来源及时间记录在 [docs/video-sources.json](docs/video-sources.json)。网页播放的是已转成 H.264/AAC MP4 的文件，位于 `public/videos/<商品 ID>/latest.mp4`；封面为同目录下的 `poster.jpg`。
 
-Currently, two official plugins are available:
+## 本地预览
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
+提交前检查：
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm run lint
+npm run build
+```
 
-## Expanding the ESLint configuration
+## 商品价格
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+价格在 `src/data/products.js` 与 `src/data/newProducts.js` 的 `pricing` 数组中维护。每个档位使用 `{ label, duration, price }`；`price` 是人民币数值。半个月档位使用 `duration: '15天'`。韩版 YES24 是独立商品，使用与国际版相同的三档价格和独立激活码。

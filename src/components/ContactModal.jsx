@@ -1,3 +1,4 @@
+import { hasPricing, startingPrice } from '../data/pricing';
 import { motion } from 'framer-motion';
 import { X, MessageCircle, Copy, CheckCheck, ScanFace } from 'lucide-react';
 import { useState } from 'react';
@@ -15,7 +16,7 @@ export default function ContactModal({ product, type = 'wechat', onClose }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const isAlipay = type === 'alipay';
+  const isAlipay = type === 'alipay' && (!product || hasPricing(product));
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -42,7 +43,7 @@ export default function ContactModal({ product, type = 'wechat', onClose }) {
         </div>
 
         {product && (
-          <p className="modal-subtitle">{product.name} · {product.currency}{product.pricing[0].price}起</p>
+          <p className="modal-subtitle">{product.name} · {hasPricing(product) ? `${product.currency}${startingPrice(product)}起` : '价格待定'}</p>
         )}
 
         {/* QR Code */}
@@ -95,7 +96,7 @@ export default function ContactModal({ product, type = 'wechat', onClose }) {
           </div>
           <div className="step-item">
             <span className="step-num">3</span>
-            {isAlipay ? '作者确认后即刻下发激活码与详细教程' : '完成转账后即刻获得激活码 + 教程'}
+            {isAlipay ? '作者确认后即刻下发激活码与详细教程' : (product && !hasPricing(product) ? '了解使用方式，价格确认后再购买' : '完成转账后即刻获得激活码 + 教程')}
           </div>
           {isAlipay && (
             <div className="step-item">

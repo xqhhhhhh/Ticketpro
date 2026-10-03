@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Check, Star, Play, MessageCircle, ArrowRight, Image, ScanFace } from 'lucide-react';
+import { hasPricing } from '../data/pricing';
 import { products } from '../data/products';
 
 function hexToRgba(hex, alpha) {
@@ -62,7 +63,7 @@ export default function ProductDetail({ onAction }) {
                 )}
                 <h1>{product.name}</h1>
                 <p className="detail-long-desc">{product.longDescription}</p>
-                <div className="detail-pricing-tiers" style={{ marginLeft: '12px' }}>
+                {hasPricing(product) ? <div className={`detail-pricing-tiers ${product.pricing.length > 3 ? 'many-tiers' : ''}`}>
                   {product.pricing.map((tier, i) => (
                     <div key={i} className={`detail-tier ${tier.badge ? 'recommended' : ''}`}>
                       {tier.badge && <span className="detail-tier-badge" style={{ background: product.color }}>{tier.badge}</span>}
@@ -74,12 +75,14 @@ export default function ProductDetail({ onAction }) {
                       <span className="detail-tier-duration">{tier.duration}</span>
                     </div>
                   ))}
-                </div>
-                <div style={{ display: 'flex', gap: '16px', marginTop: '16px', marginBottom: '32px' }}>
-                  <button className="btn btn-primary" onClick={() => onAction(product, 'alipay')} style={{ background: '#1677ff', borderColor: '#1677ff', flex: 1, padding: '14px 24px', fontSize: '1.05rem', fontWeight: 'bold' }}>
-                    <ScanFace size={18} />
-                    立即购买
-                  </button>
+                </div> : <div className="price-pending detail-price-pending">价格待定<span>可先了解功能，再联系客服咨询</span></div>}
+                <div className="detail-purchase-actions">
+                  {hasPricing(product) && (
+                    <button className="btn btn-primary" onClick={() => onAction(product, 'alipay')} style={{ background: '#1677ff', borderColor: '#1677ff', flex: 1, padding: '14px 24px', fontSize: '1.05rem', fontWeight: 'bold' }}>
+                      <ScanFace size={18} />
+                      立即购买
+                    </button>
+                  )}
                   <button className="btn btn-primary" onClick={() => onAction(product, 'wechat')} style={{ background: '#07c160', borderColor: '#07c160', flex: 1, padding: '14px 24px', fontSize: '1.05rem', fontWeight: 'bold' }}>
                     <MessageCircle size={18} />
                     联系我们
@@ -100,20 +103,21 @@ export default function ProductDetail({ onAction }) {
         </div>
       </section>
 
-      {/* Video Demo */}
-      <section className="detail-section">
+      {/* Product demo */}
+      {(product.screenshots?.length > 0 || product.videos?.length > 0) && <section className="detail-section">
         <div className="container">
           <div className="section-header" style={{ marginBottom: '40px' }}>
             <div className="section-tag" style={{ margin: '0 auto 16px' }}>
-              <Play size={14} />
+              {product.videos?.length ? <Play size={14} /> : <Image size={14} />}
               DEMO
             </div>
-            <h2 className="section-title" style={{ fontSize: '2rem', textAlign: 'center' }}>运行演示</h2>
+            <h2 className="section-title" style={{ fontSize: '2rem', textAlign: 'center' }}>{product.videos?.length ? '运行演示' : '插件界面展示'}</h2>
             <p className="section-subtitle" style={{ textAlign: 'center', margin: 0 }}>
-              观看插件的实际运行效果，眼见为实
+              {product.videos?.length ? '观看工具的实际运行效果，眼见为实' : '查看设置界面与功能选项'}
             </p>
+            {product.videoNote && <p className="demo-video-note">{product.videoNote}</p>}
           </div>
-          {product.videos && product.videos.length > 0 ? (
+          {product.videos?.length > 0 && (
             <div className="videos-grid" style={{ display: 'grid', gridTemplateColumns: product.videos.length > 1 ? 'repeat(2, 1fr)' : '1fr', gap: '20px', maxWidth: product.videos.length > 1 ? '100%' : '800px', margin: '0 auto' }}>
               {product.videos.map((vid, idx) => (
                 <motion.div
@@ -125,7 +129,10 @@ export default function ProductDetail({ onAction }) {
                   transition={{ duration: 0.5, delay: idx * 0.1 }}
                 >
                   <video 
-                    controls 
+                    controls
+                    playsInline
+                    preload="metadata"
+                    poster={product.videoPoster}
                     className="demo-video" 
                     style={{ 
                       width: '100%', 
@@ -142,23 +149,21 @@ export default function ProductDetail({ onAction }) {
                 </motion.div>
               ))}
             </div>
-          ) : (
-            <motion.div
-              className="video-container"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="video-placeholder" style={{ borderColor: hexToRgba(product.color, 0.3) }}>
-                <Play size={48} style={{ color: product.color }} />
-                <p>视频演示</p>
-                <span>上线后替换为实际演示视频</span>
+          )}
+          {product.screenshots?.length > 0 && (
+            <div className="product-screenshot-group">
+              {product.videos?.length > 0 && <h3>插件界面截图</h3>}
+              <div className="product-screenshots">
+                {product.screenshots.map((src, idx) => (
+                  <a key={src} href={src} target="_blank" rel="noreferrer" aria-label={`查看${product.shortName}界面截图 ${idx + 1}`}>
+                    <img src={src} alt={`${product.shortName}设置界面截图 ${idx + 1}`} loading="lazy" />
+                  </a>
+                ))}
               </div>
-            </motion.div>
+            </div>
           )}
         </div>
-      </section>
+      </section>}
 
       {/* Highlights (图文介绍) */}
       <section className="detail-section">
@@ -189,7 +194,7 @@ export default function ProductDetail({ onAction }) {
       </section>
 
       {/* Testimonials (用户案例) */}
-      <section className="detail-section">
+      {(product.testimonialVideo || product.testimonials?.length > 0) && <section className="detail-section">
         <div className="container">
           <div className="section-header" style={{ marginBottom: '40px' }}>
             <div className="section-tag" style={{ margin: '0 auto 16px' }}>REVIEWS</div>
@@ -248,7 +253,7 @@ export default function ProductDetail({ onAction }) {
             </div>
           )}
         </div>
-      </section>
+      </section>}
 
       {/* Bottom CTA */}
       <section className="detail-section">
@@ -256,12 +261,14 @@ export default function ProductDetail({ onAction }) {
           <div className="detail-cta-box" style={{ borderColor: hexToRgba(product.color, 0.3) }}>
             <div className="detail-cta-glow" style={{ background: `radial-gradient(circle, ${hexToRgba(product.color, 0.15)}, transparent 70%)` }} />
             <h2>准备好使用 {product.shortName} 了吗？</h2>
-            <p>扫码联系客服，即刻获取专属激活码和使用教程</p>
+            <p>{hasPricing(product) ? '扫码联系客服，即刻获取专属激活码和使用教程' : '价格待定，欢迎联系客服了解功能和使用方式'}</p>
             <div className="detail-cta-actions">
-              <button className="btn btn-primary" onClick={() => onAction(product, 'alipay')} style={{ background: '#1677ff', borderColor: '#1677ff' }}>
-                <ScanFace size={18} />
-                立即购买
-              </button>
+              {hasPricing(product) && (
+                <button className="btn btn-primary" onClick={() => onAction(product, 'alipay')} style={{ background: '#1677ff', borderColor: '#1677ff' }}>
+                  <ScanFace size={18} />
+                  立即购买
+                </button>
+              )}
               <button className="btn btn-primary" onClick={() => onAction(product, 'wechat')} style={{ background: '#07c160', borderColor: '#07c160' }}>
                 <MessageCircle size={18} />
                 联系我们

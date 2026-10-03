@@ -1,0 +1,183 @@
+[
+  {
+    "id": "interpark",
+    "source": "ITP/9月24日/9月24日.mov",
+    "sourceModifiedAt": "2026-09-25T15:03:36.478957+08:00",
+    "sourceCreatedAt": "2026-09-25T07:03:30.000000Z",
+    "durationSeconds": 179.5,
+    "video": "/videos/interpark/latest.mp4",
+    "poster": "/videos/interpark/poster.jpg"
+  },
+  {
+    "id": "melon",
+    "source": "Melon/录屏2026-05-17 22.03.30.mov",
+    "sourceModifiedAt": "2026-05-17T22:05:04.753497+08:00",
+    "sourceCreatedAt": "2026-05-17T14:03:30.000000Z",
+    "durationSeconds": 93.760812,
+    "video": "/videos/melon/latest.mp4",
+    "poster": "/videos/melon/poster.jpg"
+  },
+  {
+    "id": "yes24",
+    "source": "YES24/3月18日 (2)/3月18日 (2).mov",
+    "sourceModifiedAt": "2026-03-18T12:28:47.520070+08:00",
+    "sourceCreatedAt": "2026-03-18T04:28:45.000000Z",
+    "durationSeconds": 55.566667,
+    "video": "/videos/yes24/latest.mp4",
+    "poster": "/videos/yes24/poster.jpg"
+  },
+  {
+    "id": "yes24-kr",
+    "source": "YES24/3月18日 (2)/3月18日 (2).mov",
+    "sourceModifiedAt": "2026-03-18T12:28:47.520070+08:00",
+    "sourceCreatedAt": "2026-03-18T04:28:45.000000Z",
+    "durationSeconds": 55.566667,
+    "video": "/videos/yes24/latest.mp4",
+    "poster": "/videos/yes24/poster.jpg",
+    "sharedWith": "yes24"
+  },
+  {
+    "id": "interpark-kr",
+    "source": "韩版ITP/4月7日/4月7日.mov",
+    "sourceModifiedAt": "2026-04-07T14:32:48.051701+08:00",
+    "sourceCreatedAt": "2026-04-07T06:32:35.000000Z",
+    "durationSeconds": 87.3,
+    "video": "/videos/interpark-kr/latest.mp4",
+    "poster": "/videos/interpark-kr/poster.jpg"
+  },
+  {
+    "id": "ticketmaster",
+    "source": "TicketMaster——SG/3月18日 (2)/3月18日 (2).mov",
+    "sourceModifiedAt": "2026-03-18T12:34:07.867296+08:00",
+    "sourceCreatedAt": "2026-03-18T04:34:06.000000Z",
+    "durationSeconds": 59.233333,
+    "video": "/videos/ticketmaster/latest.mp4",
+    "poster": "/videos/ticketmaster/poster.jpg"
+  },
+  {
+    "id": "ticketlink",
+    "source": "ticketlink/录屏2026-05-20 20.10.21.mov",
+    "sourceModifiedAt": "2026-05-20T20:16:21.462306+08:00",
+    "sourceCreatedAt": "2026-05-20T12:10:22.000000Z",
+    "durationSeconds": 359.066958,
+    "video": "/videos/ticketlink/latest.mp4",
+    "poster": "/videos/ticketlink/poster.jpg"
+  },
+  {
+    "id": "thaiticketmajor",
+    "source": "thaiticketmajor/9月17日/9月17日.mov",
+    "sourceModifiedAt": "2026-09-17T00:31:15.549986+08:00",
+    "sourceCreatedAt": "2026-09-16T16:30:57.000000Z",
+    "durationSeconds": 100.766667,
+    "video": "/videos/thaiticketmajor/latest.mp4",
+    "poster": "/videos/thaiticketmajor/poster.jpg"
+  },
+  {
+    "id": "hkticketing",
+    "source": "HKTicketing/5月31日(1)/5月31日(1).mov",
+    "sourceModifiedAt": "2026-05-31T19:50:43.429887+08:00",
+    "sourceCreatedAt": "2026-05-31T11:50:23.000000Z",
+    "durationSeconds": 57.433333,
+    "video": "/videos/hkticketing/latest.mp4",
+    "poster": "/videos/hkticketing/poster.jpg"
+  },
+  {
+    "id": "tixcraft",
+    "source": "Tixcraft/6月21日 (3)/6月21日 (3).mov",
+    "sourceModifiedAt": "2026-06-21T15:33:51.940458+08:00",
+    "sourceCreatedAt": "2026-06-21T07:33:47.000000Z",
+    "durationSeconds": 56.366667,
+    "video": "/videos/tixcraft/latest.mp4",
+    "poster": "/videos/tixcraft/poster.jpg"
+  },
+  {
+    "id": "cityline",
+    "source": "cityline/3月21日 (1)/3月21日 (1).mov",
+    "sourceModifiedAt": "2026-03-21T20:49:22.045527+08:00",
+    "sourceCreatedAt": "2026-03-21T12:49:20.000000Z",
+    "durationSeconds": 59.2,
+    "video": "/videos/cityline/latest.mp4",
+    "poster": "/videos/cityline/poster.jpg"
+  },
+  {
+    "id": "kktix",
+    "source": "kktix/8月8日/8月8日.mov",
+    "sourceModifiedAt": "2026-08-08T23:32:47.871815+08:00",
+    "sourceCreatedAt": "2026-08-08T15:32:36.000000Z",
+    "durationSeconds": 65.866667,
+    "video": "/videos/kktix/latest.mp4",
+    "poster": "/videos/kktix/poster.jpg"
+  },
+  {
+    "id": "fantopia",
+    "source": "Fantopia/9月23日/9月23日.mov",
+    "sourceModifiedAt": "2026-09-23T18:49:12.039159+08:00",
+    "sourceCreatedAt": "2026-09-23T10:48:49.000000Z",
+    "durationSeconds": 86.233333,
+    "video": "/videos/fantopia/latest.mp4",
+    "poster": "/videos/fantopia/poster.jpg"
+  },
+  {
+    "id": "galaxyticketing",
+    "source": "galaxyticket/9月20日/9月20日.mov",
+    "sourceModifiedAt": "2026-09-20T02:05:06.991907+08:00",
+    "sourceCreatedAt": "2026-09-19T18:04:55.000000Z",
+    "durationSeconds": 91.766667,
+    "video": "/videos/galaxyticketing/latest.mp4",
+    "poster": "/videos/galaxyticketing/poster.jpg"
+  },
+  {
+    "id": "klook",
+    "source": "klook/9月24日/9月24日.mov",
+    "sourceModifiedAt": "2026-09-24T19:06:35.345312+08:00",
+    "sourceCreatedAt": "2026-09-24T11:06:26.000000Z",
+    "durationSeconds": 64.166667,
+    "video": "/videos/klook/latest.mp4",
+    "poster": "/videos/klook/poster.jpg"
+  },
+  {
+    "id": "ibon",
+    "source": "ibon/9月27日.mov",
+    "sourceModifiedAt": "2026-09-27T16:28:15.723257+08:00",
+    "sourceCreatedAt": "2026-09-27T08:27:41.000000Z",
+    "durationSeconds": 69.729524,
+    "video": "/videos/ibon/latest.mp4",
+    "poster": "/videos/ibon/poster.jpg"
+  },
+  {
+    "id": "ticketplus",
+    "source": "ticketplus/9月27日 (1).mov",
+    "sourceModifiedAt": "2026-09-27T23:13:39.878908+08:00",
+    "sourceCreatedAt": "2026-09-27T15:12:56.000000Z",
+    "durationSeconds": 89.257506,
+    "video": "/videos/ticketplus/latest.mp4",
+    "poster": "/videos/ticketplus/poster.jpg"
+  },
+  {
+    "id": "nol-fleet",
+    "source": "NOL Fleet/7月19日/7月19日.mov",
+    "sourceModifiedAt": "2026-07-19T16:37:34.217852+08:00",
+    "sourceCreatedAt": "2026-07-19T08:37:01.000000Z",
+    "durationSeconds": 127.733333,
+    "video": "/videos/nol-fleet/latest.mp4",
+    "poster": "/videos/nol-fleet/poster.jpg"
+  },
+  {
+    "id": "melon-fleet",
+    "source": "Melon Fleet/7月29日/7月29日.mov",
+    "sourceModifiedAt": "2026-07-29T16:27:58.538584+08:00",
+    "sourceCreatedAt": "2026-07-29T08:27:28.000000Z",
+    "durationSeconds": 117.933333,
+    "video": "/videos/melon-fleet/latest.mp4",
+    "poster": "/videos/melon-fleet/poster.jpg"
+  },
+  {
+    "id": "allticket",
+    "source": "allticket/2bad490897215e969b3f1041eb4f01c9_raw.mp4",
+    "sourceModifiedAt": "2026-10-02T13:05:04.864849+08:00",
+    "sourceCreatedAt": "2026-10-02T05:05:04.687310Z",
+    "durationSeconds": 103.932517,
+    "video": "/videos/allticket/latest.mp4",
+    "poster": "/videos/allticket/poster.jpg"
+  }
+]
