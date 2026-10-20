@@ -42,6 +42,28 @@ def test_import_uses_original_project_auth_and_tutorial(upstream):
     assert item['tutorial_url'] == 'https://example.com/tutorial'
 
 
+def test_hash_only_ocr_lookup_must_match_returned_code_suffix(upstream):
+    registry, info = upstream
+    info.pop('code')
+    info['code_last4'] = 'E001'
+    assert prepare(registry)[0]['code'] == 'TEST-CODE-001'
+    info['code_last4'] = 'BAD0'
+    with pytest.raises(ShopError):
+        prepare(registry)
+    info.pop('code_last4')
+    with pytest.raises(ShopError):
+        prepare(registry)
+
+
+def test_reported_full_code_must_match_even_when_suffix_is_equal(upstream):
+    registry, info = upstream
+    info.update(code='DIFFERENT-CODE-001', code_last4='E001')
+    with pytest.raises(ShopError):
+        prepare(registry)
+    info['code'] = 'TESTCODE001'
+    assert prepare(registry)[0]['code'] == 'TEST-CODE-001'
+
+
 @pytest.mark.parametrize('changes', [
     {'status': 'ACTIVE'}, {'plan_days': 365}, {'binding_mode': 'none'},
     {'revoked': True}, {'note': 'old-manually-sold-batch'}, {'activated_at_ms': 12345},

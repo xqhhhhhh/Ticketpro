@@ -26,6 +26,17 @@ def load_projects(path):
     return {p['id']: p for p in data['projects'] if p.get('enabled', True)}
 
 
+def matches_lookup_code(info, code):
+    reported = info.get('code') or info.get('activation_code')
+    if reported:
+        return code_hash(str(reported)) == code_hash(code)
+    # Older OCR services store only a hash and last four characters. Their
+    # authenticated lookup hashes the complete requested code before returning a row.
+    normalized = re.sub('[^A-Z0-9]', '', code.upper())
+    last4 = str(info.get('code_last4') or '').strip().upper()
+    return len(normalized) >= 8 and len(last4) == 4 and last4 == normalized[-4:]
+
+
 def lookup_code(client, base, project, headers, code):
     if project.get('stock_adapter') == 'allticket':
         response = client.get(base + '/api/admin/codes', params={'code': code})
@@ -87,7 +98,7 @@ def prepare_stock(registry_path, product_id, project_id, days, batch, codes, tut
                 continue
             seen.add(code_hash(code))
             info = lookup_code(client, base, project, headers, code)
-            if (str(info.get('code', '')).strip().upper() != code
+            if (not matches_lookup_code(info, code)
                     or info.get('status') != 'NEW' or info.get('revoked') or info.get('activated_at_ms')
                     or info.get('expires_at_ms') or info.get('bound_device_id_masked')
                     or info.get('legacy_device_id_masked') or info.get('device_count')
