@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "catalog": "node scripts/export-catalog.mjs",
+    "predev": "node scripts/export-catalog.mjs",
+    "prebuild": "node scripts/export-catalog.mjs",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
@@ -13,6 +16,7 @@
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.7.0",
     "md5": "^2.3.0",
+    "qrcode": "^1.5.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.2"

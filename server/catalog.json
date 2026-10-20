@@ -1,0 +1,506 @@
+[
+  {
+    "id": "interpark",
+    "name": "国际版 Interpark 捡漏抢票工具",
+    "plans": [
+      {
+        "days": 15,
+        "label": "半月",
+        "duration": "15天",
+        "cents": 6600
+      },
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 8800
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 13600
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 18800
+      }
+    ]
+  },
+  {
+    "id": "melon",
+    "name": "Melon 抢票捡漏插件",
+    "plans": [
+      {
+        "days": 15,
+        "label": "半月",
+        "duration": "15天",
+        "cents": 6000
+      },
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 8000
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 12800
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 16800
+      }
+    ]
+  },
+  {
+    "id": "yes24",
+    "name": "国际版 YES24 捡漏抢票插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 8000
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 12800
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 16800
+      }
+    ]
+  },
+  {
+    "id": "yes24-kr",
+    "name": "韩版 YES24 抢票插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 8000
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 12800
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 16800
+      }
+    ]
+  },
+  {
+    "id": "interpark-kr",
+    "name": "韩版 Interpark 抢票捡漏插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 8000
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 12800
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 16800
+      }
+    ]
+  },
+  {
+    "id": "ticketmaster",
+    "name": "新加坡TicketMaster抢票捡漏插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 6600
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 9900
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 12800
+      }
+    ]
+  },
+  {
+    "id": "ticketlink",
+    "name": "韩国 Ticketlink 抢票捡漏插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 8000
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 12800
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 16800
+      }
+    ]
+  },
+  {
+    "id": "thaiticketmajor",
+    "name": "ThaiTicketMajor 抢票捡漏插件",
+    "plans": [
+      {
+        "days": 15,
+        "label": "半月",
+        "duration": "15天",
+        "cents": 6000
+      },
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 8000
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 12800
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 16800
+      }
+    ]
+  },
+  {
+    "id": "hkticketing",
+    "name": "快达 HKTicketing 抢票捡漏插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 6600
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 9900
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 12800
+      }
+    ]
+  },
+  {
+    "id": "tixcraft",
+    "name": "拓元 TixCraft 抢票捡漏插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 8000
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 12800
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 16800
+      }
+    ]
+  },
+  {
+    "id": "cityline",
+    "name": "Cityline 捡漏抢票插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 6600
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 9900
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 12800
+      }
+    ]
+  },
+  {
+    "id": "allticket",
+    "name": "AllTicket 抢票捡漏插件",
+    "plans": [
+      {
+        "days": 15,
+        "label": "半月",
+        "duration": "15天",
+        "cents": 6000
+      },
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 8000
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 12800
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 16800
+      }
+    ]
+  },
+  {
+    "id": "kktix",
+    "name": "KKTIX 抢票捡漏插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 8000
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 12800
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 16800
+      }
+    ]
+  },
+  {
+    "id": "fantopia",
+    "name": "Fantopia 抢票捡漏插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 6600
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 9900
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 12800
+      }
+    ]
+  },
+  {
+    "id": "galaxyticketing",
+    "name": "Galaxy Ticketing 抢票捡漏插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 6600
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 9900
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 12800
+      }
+    ]
+  },
+  {
+    "id": "klook",
+    "name": "Klook 客路抢票捡漏插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 6600
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 9900
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 12800
+      }
+    ]
+  },
+  {
+    "id": "ibon",
+    "name": "ibon 抢票捡漏插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 8000
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 12800
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 16800
+      }
+    ]
+  },
+  {
+    "id": "ticketplus",
+    "name": "Ticket Plus 远大售票捡漏插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 8000
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 12800
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 16800
+      }
+    ]
+  },
+  {
+    "id": "nol-fleet",
+    "name": "NOL Fleet 桌面批量抢票工具",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 12800
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 19900
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 28800
+      }
+    ]
+  },
+  {
+    "id": "melon-fleet",
+    "name": "Melon Fleet 桌面批量抢票工具",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 16800
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 29900
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 39900
+      }
+    ]
+  }
+]

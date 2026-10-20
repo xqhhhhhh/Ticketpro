@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "VITE_COMMERCE_API=https://api.nexuschat.top/ticketpro npm run build",
   "outputDirectory": "dist",
   "rewrites": [
     {

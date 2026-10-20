@@ -1,0 +1,18 @@
+[Unit]
+Description=Recover paid TicketPro orders with missing notifications
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=ticketpro
+Group=ticketpro-web
+WorkingDirectory=/opt/ticketpro
+EnvironmentFile=/etc/ticketpro.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+UMask=0027
+ExecStart=/opt/ticketpro/.venv/bin/python -m server.cli reconcile --limit 200
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/ticketpro

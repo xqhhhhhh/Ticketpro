@@ -6,6 +6,8 @@ import { products, features } from './data/products';
 import { hasPricing } from './data/pricing';
 import ProductDetail from './pages/ProductDetail';
 import ContactModal from './components/ContactModal';
+import CheckoutModal from './components/CheckoutModal';
+import OrderPage, { OrdersPage } from './pages/OrderPage';
 import './App.css';
 
 import QRViewerModal from './components/QRViewerModal';
@@ -64,6 +66,7 @@ function Navbar() {
           <a href="/#products">核心产品</a>
           <a href="/#features">高级特性</a>
           <a href="/#contact-section">联系我们</a>
+          <Link to="/orders">订单查询</Link>
 
         </div>
         <a href="/#products" className="nav-cta">立即选购</a>
@@ -361,12 +364,19 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage onAction={(p, type) => setModalConfig({ product: p, type })} />} />
           <Route path="/product/:id" element={<ProductDetail onAction={(p, type) => setModalConfig({ product: p, type })} />} />
+          <Route path="/order/:id" element={<OrderPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
         </Routes>
         <Footer />
 
         <AnimatePresence>
           {modalConfig && (
-            <ContactModal
+            modalConfig.type === 'alipay' && modalConfig.product ? <CheckoutModal
+              key={modalConfig.product.id}
+              product={modalConfig.product}
+              onClose={() => setModalConfig(null)}
+              onContact={() => setModalConfig({ ...modalConfig, type: 'wechat' })}
+            /> : <ContactModal
               product={modalConfig.product}
               type={modalConfig.type}
               onClose={() => setModalConfig(null)}

@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "checked_on": "2026-10-20",
+  "projects": [
+    {
+      "id": "nol_fleet_basic",
+      "name": "NOL Fleet 基础版",
+      "base_url": "https://api.nexuschat.top/nol-ultra",
+      "api_type": "batch",
+      "plan_tier": "basic",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY",
+      "stock_adapter": "fleet",
+      "login_path": "/console/api/login",
+      "admin_password": "$TICKETPRO_LICENSE_ADMIN_PASSWORD"
+    },
+    {
+      "id": "nol_fleet_personal",
+      "name": "NOL Fleet 个人版",
+      "base_url": "https://api.nexuschat.top/nol-ultra",
+      "api_type": "batch",
+      "plan_tier": "pro",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY",
+      "stock_adapter": "fleet",
+      "login_path": "/console/api/login",
+      "admin_password": "$TICKETPRO_LICENSE_ADMIN_PASSWORD"
+    },
+    {
+      "id": "nol_fleet_professional",
+      "name": "NOL Fleet 专业版",
+      "base_url": "https://api.nexuschat.top/nol-ultra",
+      "api_type": "batch",
+      "plan_tier": "ultra",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY",
+      "stock_adapter": "fleet",
+      "login_path": "/console/api/login",
+      "admin_password": "$TICKETPRO_LICENSE_ADMIN_PASSWORD"
+    },
+    {
+      "id": "interpark",
+      "name": "ITP",
+      "base_url": "https://api.nexuschat.top/ocr-api",
+      "api_type": "available",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY"
+    },
+    {
+      "id": "melon",
+      "name": "Melon",
+      "base_url": "https://api.nexuschat.top/melon-ocr",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY"
+    },
+    {
+      "id": "itp",
+      "name": "韩版ITP",
+      "base_url": "https://api.nexuschat.top/itp-ocr",
+      "api_type": "available",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY"
+    },
+    {
+      "id": "yes24",
+      "name": "YES24 国际版",
+      "base_url": "https://api.nexuschat.top/yes24-ticket",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY"
+    },
+    {
+      "id": "yes24_kr",
+      "name": "YES24 韩版",
+      "base_url": "https://api.nexuschat.top/yes24-kr-ticket",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY"
+    },
+    {
+      "id": "ticketmaster_sg",
+      "name": "TicketmasterSG",
+      "base_url": "https://api.nexuschat.top/ticketmaster-sg",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY"
+    },
+    {
+      "id": "cityline",
+      "name": "Cityline",
+      "base_url": "https://api.nexuschat.top/cityline-ticket",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY"
+    },
+    {
+      "id": "hkticketing",
+      "name": "HKTicketing",
+      "base_url": "https://api.nexuschat.top/hkticketing-license",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY",
+      "lookup_path": "/console/api/lookup",
+      "login_path": "/console/api/login",
+      "admin_password": "$TICKETPRO_LICENSE_ADMIN_PASSWORD"
+    },
+    {
+      "id": "galaxyticketing",
+      "name": "Galaxy Ticketing 银河票务",
+      "base_url": "https://api.nexuschat.top/galaxyticketing-license",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY",
+      "lookup_path": "/console/api/lookup",
+      "login_path": "/console/api/login",
+      "admin_password": "$TICKETPRO_LICENSE_ADMIN_PASSWORD"
+    },
+    {
+      "id": "tixcraft",
+      "name": "Tixcraft",
+      "base_url": "https://api.nexuschat.top/tixcraft",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY"
+    },
+    {
+      "id": "thaiticketmajor",
+      "name": "ThaiTicketMajor",
+      "base_url": "https://api.nexuschat.top/thaiticketmajor",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY"
+    },
+    {
+      "id": "ticketlink",
+      "name": "Ticketlink",
+      "base_url": "https://api.nexuschat.top/ticketlink",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY"
+    },
+    {
+      "id": "melon_fleet_basic",
+      "name": "Melon Fleet 基础版",
+      "base_url": "https://api.nexuschat.top/melon-fleet",
+      "api_type": "batch",
+      "plan_tier": "basic",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY",
+      "stock_adapter": "fleet",
+      "login_path": "/console/api/login",
+      "admin_password": "$TICKETPRO_LICENSE_ADMIN_PASSWORD"
+    },
+    {
+      "id": "melon_fleet_personal",
+      "name": "Melon Fleet 个人版",
+      "base_url": "https://api.nexuschat.top/melon-fleet",
+      "api_type": "batch",
+      "plan_tier": "pro",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY",
+      "stock_adapter": "fleet",
+      "login_path": "/console/api/login",
+      "admin_password": "$TICKETPRO_LICENSE_ADMIN_PASSWORD"
+    },
+    {
+      "id": "melon_fleet_professional",
+      "name": "Melon Fleet 专业版",
+      "base_url": "https://api.nexuschat.top/melon-fleet",
+      "api_type": "batch",
+      "plan_tier": "ultra",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY",
+      "stock_adapter": "fleet",
+      "login_path": "/console/api/login",
+      "admin_password": "$TICKETPRO_LICENSE_ADMIN_PASSWORD"
+    },
+    {
+      "id": "kktix",
+      "name": "KKTIX",
+      "base_url": "https://api.nexuschat.top/kktix",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY"
+    },
+    {
+      "id": "fantopia",
+      "name": "Fantopia",
+      "base_url": "https://api.nexuschat.top/fantopia",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY",
+      "lookup_path": "/console/api/lookup"
+    },
+    {
+      "id": "klook",
+      "name": "Klook",
+      "base_url": "https://api.nexuschat.top/klook",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY",
+      "lookup_path": "/console/api/lookup"
+    },
+    {
+      "id": "ibon",
+      "name": "ibon",
+      "base_url": "https://api.nexuschat.top/ibon",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY"
+    },
+    {
+      "id": "ticketplus",
+      "name": "Ticket Plus 远大售票",
+      "base_url": "https://api.nexuschat.top/ticketplus-helper",
+      "api_type": "batch",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY"
+    },
+    {
+      "id": "allticket-leofest",
+      "name": "AllTicket",
+      "base_url": "https://api.nexuschat.top/allticket-leofest",
+      "api_type": "available",
+      "plan_tier": "",
+      "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY",
+      "stock_adapter": "allticket",
+      "admin_password": "$TICKETPRO_LICENSE_ADMIN_PASSWORD"
+    }
+  ]
+}

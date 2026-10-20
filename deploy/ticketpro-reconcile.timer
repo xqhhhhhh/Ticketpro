@@ -1,0 +1,10 @@
+[Unit]
+Description=Check TicketPro missed notifications every minute
+
+[Timer]
+OnCalendar=*-*-* *:*:00
+RandomizedDelaySec=5
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -8,6 +8,16 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+.venv/
+__pycache__/
+.pytest_cache/
+server/data/
+server/backups/
+server/*.local.json
+.env
+.env.*
+!.env.example
+output/
 dist
 dist-ssr
 *.local
