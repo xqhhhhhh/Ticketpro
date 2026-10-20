@@ -27,6 +27,8 @@ install -m 0644 "$bundle_dir/scripts/connect-unified-console.py" /opt/ticketpro/
 install -m 0644 "$bundle_dir"/deploy/* /opt/ticketpro/deploy/
 python3 -m venv /opt/ticketpro/.venv
 /opt/ticketpro/.venv/bin/python -m pip install --index-url https://pypi.org/simple -r /opt/ticketpro/server/requirements.lock
+chgrp -R ticketpro-web /opt/ticketpro/.venv
+chmod -R g+rX /opt/ticketpro/.venv
 if [[ ! -e /opt/ticketpro-shared/web-reserved-codes.json ]]; then
   printf '%s\n' '{"version":1,"projects":{}}' | install -o ticketpro -g ticketpro-web -m 0640 /dev/stdin /opt/ticketpro-shared/web-reserved-codes.json
 fi
