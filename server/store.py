@@ -132,6 +132,13 @@ class Store:
             except sqlite3.IntegrityError:
                 raise ShopError('transaction_conflict', 409) from None
             db.execute("UPDATE stock SET state='sold' WHERE order_id=?", (order_id,))
+        # Delivery commits first. A missed wake-up is recovered by the stock timer.
+        signal = os.getenv('TICKETPRO_RESTOCK_SIGNAL', '')
+        if signal:
+            try:
+                Path(signal).touch()
+            except OSError:
+                pass
 
     def public_order(self, order):
         result = {k: order[k] for k in ('id', 'product_id', 'name', 'days', 'duration', 'cents', 'status', 'created_at', 'paid_at')}
@@ -147,30 +154,60 @@ class Store:
     def import_stock(self, items, manifest_path):
         """Publish exclusions BEFORE committing sellable stock. An interrupted import fails closed."""
         with self.connection(write=True) as db:
-            for item in items:
-                db.execute('INSERT INTO stock(product_id,days,project_id,code,code_hash,binding_mode,batch,tutorial_url,download_url) '
-                           'VALUES (?,?,?,?,?,?,?,?,?)',
-                           (item['product_id'], item['days'], item['project_id'], item['code'], code_hash(item['code']),
-                            item['binding_mode'], item['batch'], item['tutorial_url'], ''))
-            hashes = {}
-            for row in db.execute('SELECT project_id,code_hash FROM stock'):
-                hashes.setdefault(row['project_id'], []).append(row['code_hash'])
-            path = Path(manifest_path)
-            path.parent.mkdir(parents=True, exist_ok=True)
-            temp = path.with_name(path.name + '.' + secrets.token_hex(8) + '.tmp')
+            self._insert_stock(db, items)
+            self._publish_manifest(db, manifest_path)
+
+    @staticmethod
+    def _insert_stock(db, items, states=None):
+        for index, item in enumerate(items):
+            db.execute('INSERT INTO stock(product_id,days,project_id,code,code_hash,binding_mode,batch,tutorial_url,download_url,state) '
+                       'VALUES (?,?,?,?,?,?,?,?,?,?)',
+                       (item['product_id'], item['days'], item['project_id'], item['code'], code_hash(item['code']),
+                        item['binding_mode'], item['batch'], item['tutorial_url'], '',
+                        states[index] if states else 'available'))
+
+    @staticmethod
+    def _publish_manifest(db, manifest_path, extra=None):
+        """Caller holds the stock DB write lock, including for quarantine-only writes."""
+        path = Path(manifest_path)
+        hashes = {}
+        if path.exists():
             try:
-                with temp.open('x', encoding='utf-8') as file:
-                    os.chmod(temp, 0o640)
-                    json.dump({'version': 1, 'projects': hashes}, file)
-                    file.flush()
-                    os.fsync(file.fileno())
-                os.replace(temp, path)
-            finally:
-                temp.unlink(missing_ok=True)
+                previous = json.loads(path.read_text())
+                assert previous['version'] == 1 and isinstance(previous['projects'], dict)
+                for project, values in previous['projects'].items():
+                    assert isinstance(values, list) and all(isinstance(v, str) and re.fullmatch('[a-f0-9]{64}', v) for v in values)
+                    hashes[project] = set(values)
+            except (ValueError, KeyError, TypeError, AssertionError):
+                raise ShopError('库存隔离清单无效，已停止写入') from None
+        for row in db.execute('SELECT project_id,code_hash FROM stock'):
+            hashes.setdefault(row['project_id'], set()).add(row['code_hash'])
+        for project, values in (extra or {}).items():
+            hashes.setdefault(project, set()).update(values)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temp = path.with_name(path.name + '.' + secrets.token_hex(8) + '.tmp')
+        try:
+            with temp.open('x', encoding='utf-8') as file:
+                os.chmod(temp, 0o640)
+                json.dump({'version': 1, 'projects': {p: sorted(v) for p, v in hashes.items()}}, file)
+                file.flush()
+                os.fsync(file.fileno())
+            os.replace(temp, path)
+        finally:
+            temp.unlink(missing_ok=True)
+
+    def quarantine_stock(self, project_id, codes, manifest_path):
+        with self.connection(write=True) as db:
+            self._publish_manifest(db, manifest_path, {project_id: [code_hash(code) for code in codes]})
 
     def summary(self):
         with self.connection() as db:
-            return {
+            result = {
                 'stock': [dict(r) for r in db.execute('SELECT product_id,days,state,count(*) count FROM stock GROUP BY product_id,days,state')],
                 'orders': [dict(r) for r in db.execute('SELECT id,name,duration,cents,status,created_at,paid_at FROM orders ORDER BY created_at DESC LIMIT 100')],
             }
+            if db.execute("SELECT 1 FROM sqlite_master WHERE name='restock_jobs'").fetchone():
+                result['restock'] = [dict(r) for r in db.execute(
+                    'SELECT id,product_id,days,quantity,status,attempts,next_attempt,last_error,created_at,completed_at '
+                    'FROM restock_jobs ORDER BY created_at DESC,id DESC LIMIT 100')]
+            return result

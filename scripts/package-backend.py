@@ -12,7 +12,7 @@ files = sorted((ROOT / 'server').glob('*.py'))
 files += [ROOT / 'server' / name for name in ['requirements.lock', 'catalog.json', 'product-projects.json',
                                              'license-projects.json', 'tutorials.local.json']]
 files += sorted((ROOT / 'deploy').glob('*'))
-files += [ROOT / 'scripts/connect-unified-console.py', ROOT / 'docs/payment-delivery.md']
+files += [ROOT / 'scripts/connect-unified-console.py', ROOT / 'scripts/configure-stock-sources.py', ROOT / 'docs/payment-delivery.md']
 if any(not path.is_file() for path in files):
     raise SystemExit('服务端源码或教程配置缺失，未生成部署包。')
 args.output.parent.mkdir(parents=True, exist_ok=True)

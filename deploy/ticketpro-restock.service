@@ -1,0 +1,22 @@
+[Unit]
+Description=Replenish TicketPro website-only activation code stock
+After=network-online.target ticketpro.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/ticketpro
+EnvironmentFile=/etc/ticketpro.env
+EnvironmentFile=/etc/ticketpro-stock.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+UMask=0077
+ExecStart=/opt/ticketpro/.venv/bin/python -m server.restock --limit 20
+TimeoutStartSec=10min
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/ticketpro /opt/ticketpro-shared /var/lib/ticketpro-restock
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=CAP_SETUID CAP_SETGID CAP_DAC_OVERRIDE CAP_DAC_READ_SEARCH

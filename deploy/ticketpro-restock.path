@@ -1,0 +1,9 @@
+[Unit]
+Description=Wake TicketPro replenishment after a successful delivery
+
+[Path]
+PathChanged=/var/lib/ticketpro/restock.request
+Unit=ticketpro-restock.service
+
+[Install]
+WantedBy=multi-user.target

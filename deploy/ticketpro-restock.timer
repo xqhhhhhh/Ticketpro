@@ -1,0 +1,11 @@
+[Unit]
+Description=Recover missed TicketPro replenishment wake-ups
+
+[Timer]
+OnBootSec=30s
+OnUnitInactiveSec=30s
+AccuracySec=2s
+Unit=ticketpro-restock.service
+
+[Install]
+WantedBy=timers.target
