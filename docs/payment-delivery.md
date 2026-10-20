@@ -59,7 +59,9 @@ npm run dev -- --host 127.0.0.1
 
 ## 部署
 
-现有正式商品站为 `https://ticket-pro-website.vercel.app`，沿用此地址。`vercel.json` 已给生产构建设置公开的订单 API 地址 `https://api.nexuschat.top/ticketpro`；支付密钥不进入 Vercel。以下文件是部署准备，不表示生产服务器已安装或真实付款联调已通过。
+现有正式商品站为 `https://ticket-pro-website.vercel.app`，沿用此地址。`vercel.json` 已给生产构建设置公开的订单 API 地址 `https://api.nexuschat.top/ticketpro`；支付密钥不进入 Vercel。
+
+2026-10-20 已将前端发布到现有 Vercel 项目，并将订单服务、Nginx 入口、每分钟补发与每日备份部署到现有 API 主机。正式接口健康检查、CORS、无签名回调拒绝和数据库备份已验证。统一管理台已启用网站库存隔离。已为 Interpark 新生成一枚独立测试码并预留到 0.01 元真实付款订单，付款码已生成，正在等待扫码验收；正常商品价格未修改，正常可售库存尚未导入。部署完成不等于真实付款和插件激活验收完成。
 
 生成服务端部署包：
 
