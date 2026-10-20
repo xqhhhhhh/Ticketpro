@@ -64,6 +64,16 @@ def test_reported_full_code_must_match_even_when_suffix_is_equal(upstream):
     assert prepare(registry)[0]['code'] == 'TEST-CODE-001'
 
 
+@pytest.mark.parametrize('field', ['bound_device_id_masked', 'legacy_device_id_masked'])
+def test_legacy_empty_device_marker_is_not_a_previous_binding(upstream, field):
+    registry, info = upstream
+    info.update(bound_device_id_masked='-', legacy_device_id_masked='-')
+    assert prepare(registry)[0]['binding_mode'] == 'machine'
+    info[field] = 'abcd***wxyz'
+    with pytest.raises(ShopError):
+        prepare(registry)
+
+
 @pytest.mark.parametrize('changes', [
     {'status': 'ACTIVE'}, {'plan_days': 365}, {'binding_mode': 'none'},
     {'revoked': True}, {'note': 'old-manually-sold-batch'}, {'activated_at_ms': 12345},

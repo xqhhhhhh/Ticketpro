@@ -55,9 +55,13 @@ def lookup_code(client, base, project, headers, code):
                            headers=headers, json={'activation_code': code})
     response.raise_for_status()
     data = response.json()
-    info = data.get('code_info') or data.get('license') or {}
+    info = dict(data.get('code_info') or data.get('license') or {})
+    # Legacy consoles render an empty device ID as "-". Preserve every actual
+    # masked ID so previously bound codes remain ineligible for website stock.
+    for field in ('bound_device_id_masked', 'legacy_device_id_masked'):
+        if info.get(field) == '-':
+            info[field] = ''
     if project.get('stock_adapter') == 'fleet':
-        info = dict(info)
         info['note'] = info.get('batch_name')
         if info.get('binding_mode') == 'device' and info.get('device_binding_required') is True:
             info['binding_mode'] = 'machine'
