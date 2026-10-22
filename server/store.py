@@ -53,6 +53,8 @@ class Store:
                 lease_until INTEGER NOT NULL DEFAULT 0, last_error TEXT NOT NULL DEFAULT '',
                 created_at INTEGER NOT NULL, sent_at INTEGER);
             ''')
+            if 'is_test' not in {r['name'] for r in db.execute('PRAGMA table_info(orders)')}:
+                db.execute('ALTER TABLE orders ADD COLUMN is_test INTEGER NOT NULL DEFAULT 0')
             mode = 'demo' if demo else 'production'
             previous = db.execute("SELECT value FROM shop_metadata WHERE key='mode'").fetchone()
             if previous and previous['value'] != mode:

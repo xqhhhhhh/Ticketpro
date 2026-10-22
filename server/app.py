@@ -3,8 +3,9 @@ import ipaddress
 import json
 from pathlib import Path
 import secrets
+import os
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse
 from pydantic import BaseModel, ConfigDict, Field
@@ -180,6 +181,29 @@ def create_app(settings=None, gateway=None):
                                                                'Bearer ' + settings.admin_key):
             raise ShopError('unauthorized', 401)
         return store.summary()
+
+    def dashboard_auth(request):
+        header = request.headers.get('authorization', '')
+        supplied = header[7:] if header.startswith('Bearer ') else ''
+        if not supplied or not any(key and secrets.compare_digest(supplied, key)
+                                   for key in (settings.dashboard_key, settings.admin_key)):
+            raise ShopError('unauthorized', 401)
+
+    @app.get(PREFIX + '/api/admin/dashboard')
+    def admin_dashboard(request: Request, q: str = Query('', max_length=100), status: str = '',
+                        product: str = '', start: str = '', end: str = '', include_tests: bool = False,
+                        page: int = Query(1, ge=1, le=100000), size: int = Query(20, ge=1, le=100)):
+        dashboard_auth(request)
+        from .dashboard import dashboard
+        return dashboard(store, catalog, query=q.strip(), status=status, product=product,
+                         start=start, end=end, include_tests=include_tests, page=page, size=size,
+                         timezone=os.getenv('TICKETPRO_NOTIFICATION_TIMEZONE', 'Europe/Berlin'))
+
+    @app.get(PREFIX + '/api/admin/orders/{order_id}')
+    def admin_order_detail(order_id: str, request: Request, reveal: bool = False):
+        dashboard_auth(request)
+        from .dashboard import order_detail
+        return order_detail(store, order_id, reveal)
 
     if settings.demo:
         @app.get(PREFIX + '/demo-pay/{order_id}')

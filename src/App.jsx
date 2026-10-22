@@ -8,6 +8,7 @@ import ProductDetail from './pages/ProductDetail';
 import ContactModal from './components/ContactModal';
 import CheckoutModal from './components/CheckoutModal';
 import OrderPage, { OrdersPage } from './pages/OrderPage';
+import AdminOrders from './pages/AdminOrders';
 import './App.css';
 
 import QRViewerModal from './components/QRViewerModal';
@@ -353,21 +354,23 @@ function HomePage({ onAction }) {
 }
 
 /* ===== App ===== */
-function App() {
+function AppContent() {
   const [modalConfig, setModalConfig] = useState(null);
+  const isAdmin = useLocation().pathname.startsWith('/admin/');
 
   return (
-    <BrowserRouter>
+    <>
       <ScrollToTop />
       <div className="app-wrapper">
-        <Navbar />
+        {!isAdmin && <Navbar />}
         <Routes>
           <Route path="/" element={<HomePage onAction={(p, type) => setModalConfig({ product: p, type })} />} />
           <Route path="/product/:id" element={<ProductDetail onAction={(p, type) => setModalConfig({ product: p, type })} />} />
           <Route path="/order/:id" element={<OrderPage />} />
           <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/admin/orders" element={<AdminOrders />} />
         </Routes>
-        <Footer />
+        {!isAdmin && <Footer />}
 
         <AnimatePresence>
           {modalConfig && (
@@ -384,8 +387,10 @@ function App() {
           )}
         </AnimatePresence>
       </div>
-    </BrowserRouter>
+    </>
   );
 }
+
+function App() { return <BrowserRouter><AppContent /></BrowserRouter>; }
 
 export default App;

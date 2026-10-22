@@ -17,7 +17,9 @@ export async function shopRequest(path, { key, ...options } = {}) {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
     const detail = typeof data.detail === 'string' ? data.detail : '';
-    throw new Error(messages[detail] || detail || '暂时无法连接订单服务，请稍后重试或联系微信客服。');
+    const error = new Error(messages[detail] || detail || '暂时无法连接订单服务，请稍后重试或联系微信客服。');
+    error.status = response.status;
+    throw error;
   }
   return data;
 }
