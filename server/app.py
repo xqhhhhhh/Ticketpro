@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import secrets
 import os
+from datetime import date
+from typing import Literal
 
 from fastapi import FastAPI, Request, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,6 +26,15 @@ class NewOrder(BaseModel):
     days: int = Field(ge=0, le=3650)
     request_id: str = Field(pattern=r'^[a-zA-Z0-9-]{20,80}$')
     access_key: str = Field(pattern=r'^[a-f0-9]{64}$')
+
+
+class SettlementCheck(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    status: Literal['unverified', 'received', 'not_received']
+    received_cents: int | None = Field(default=None, gt=0, le=100000000)
+    received_date: date | None = None
+    note: str = Field(default='', max_length=300)
+    revision: int = Field(ge=0)
 
 
 class DemoGateway:
@@ -204,6 +215,15 @@ def create_app(settings=None, gateway=None):
         dashboard_auth(request)
         from .dashboard import order_detail
         return order_detail(store, order_id, reveal)
+
+    @app.post(PREFIX + '/api/admin/orders/{order_id}/settlement')
+    def admin_settlement(order_id: str, payload: SettlementCheck, request: Request):
+        dashboard_auth(request)
+        from .dashboard import record_settlement
+        return record_settlement(store, order_id, status=payload.status,
+                                 received_cents=payload.received_cents,
+                                 received_date=payload.received_date.isoformat() if payload.received_date else None,
+                                 note=payload.note, revision=payload.revision)
 
     if settings.demo:
         @app.get(PREFIX + '/demo-pay/{order_id}')

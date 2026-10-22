@@ -1,6 +1,7 @@
 """Read-only merchant views; buyer credentials and gateway payloads never leave the DB."""
 from datetime import date, datetime, time, timedelta
 from zoneinfo import ZoneInfo
+import time as clock
 
 from .store import ShopError
 
@@ -47,13 +48,19 @@ def dashboard(store, catalog, *, query='', status='', product='', start='', end=
     with store.connection() as db:
         db.execute('BEGIN')
         stats = dict(db.execute(f'''SELECT count(*) total,
-            coalesce(sum(status='delivered'),0) paid, coalesce(sum(status='pending'),0) pending,
-            coalesce(sum(CASE WHEN status='delivered' THEN cents ELSE 0 END),0) revenue,
-            coalesce(sum(CASE WHEN status='delivered' AND paid_at>=? AND paid_at<? THEN cents ELSE 0 END),0) today_revenue
-            FROM orders o WHERE {where}''', (midnight(today), midnight(today+timedelta(days=1)), *values)).fetchone())
+            coalesce(sum(o.status='delivered'),0) paid, coalesce(sum(o.status='pending'),0) pending,
+            coalesce(sum(CASE WHEN o.status='delivered' THEN cents ELSE 0 END),0) revenue,
+            coalesce(sum(CASE WHEN o.status='delivered' AND paid_at>=? AND paid_at<? THEN cents ELSE 0 END),0) today_revenue,
+            coalesce(sum(o.status='delivered' AND coalesce(c.status,'unverified')='received'),0) received_orders,
+            coalesce(sum(o.status='delivered' AND coalesce(c.status,'unverified')='not_received'),0) not_received_orders,
+            coalesce(sum(o.status='delivered' AND coalesce(c.status,'unverified')='unverified'),0) unverified_orders
+            FROM orders o LEFT JOIN settlement_checks c ON c.order_id=o.id WHERE {where}''',
+            (midnight(today), midnight(today+timedelta(days=1)), *values)).fetchone())
         rows = [dict(r) for r in db.execute(f'''SELECT o.id,o.product_id,o.name,o.days,o.duration,o.cents,
-            o.status,o.created_at,o.paid_at,o.is_test,n.status notification_status
+            o.status,o.created_at,o.paid_at,o.is_test,n.status notification_status,
+            coalesce(c.status,'unverified') settlement_status,c.checked_at settlement_checked_at
             FROM orders o LEFT JOIN order_notifications n ON n.order_id=o.id
+            LEFT JOIN settlement_checks c ON c.order_id=o.id
             WHERE {where} ORDER BY o.created_at DESC,o.id DESC LIMIT ? OFFSET ?''',
             (*values, size, (page-1)*size))]
         sales = db.execute(f'''SELECT o.paid_at,o.cents FROM orders o WHERE {where}
@@ -88,6 +95,47 @@ def order_detail(store, order_id, reveal=False):
     code = result.pop('code') or ''
     result['code_suffix'] = code[-4:] if result['status'] == 'delivered' else ''
     result['tutorial_url'] = store.tutorials.get(result['product_id']) or result['tutorial_url']
+    with store.connection() as db:
+        check = db.execute('SELECT status,received_cents,received_date,note,checked_at,revision FROM settlement_checks WHERE order_id=?',
+                           (order_id,)).fetchone()
+        history = [dict(r) for r in db.execute('''SELECT status,received_cents,received_date,note,checked_at,revision
+            FROM settlement_history WHERE order_id=? ORDER BY revision DESC LIMIT 10''', (order_id,))]
+    result['settlement'] = dict(check) if check else {'status': 'unverified', 'received_cents': None,
+                                                   'received_date': None, 'note': '', 'checked_at': None, 'revision': 0}
+    result['settlement']['source'] = 'merchant_check' if check else 'unavailable'
+    result['settlement_history'] = history
     if reveal and result['status'] == 'delivered':
         result['code'] = code
     return result
+
+
+def record_settlement(store, order_id, *, status, received_cents=None, received_date=None, note='', revision=0):
+    if status not in {'unverified', 'received', 'not_received'}:
+        raise ShopError('invalid_settlement_status')
+    if status != 'received' and (received_cents is not None or received_date is not None):
+        raise ShopError('settlement_amount_requires_received')
+    if received_date:
+        try:
+            date.fromisoformat(received_date)
+        except ValueError:
+            raise ShopError('invalid_settlement_date') from None
+    now = int(clock.time())
+    with store.connection(write=True) as db:
+        order = db.execute('SELECT status,cents FROM orders WHERE id=?', (order_id,)).fetchone()
+        if not order:
+            raise ShopError('order_not_found', 404)
+        if order['status'] != 'delivered':
+            raise ShopError('unpaid_order_cannot_confirm_settlement')
+        if received_cents is not None and (received_cents <= 0 or received_cents > order['cents']):
+            raise ShopError('invalid_settlement_amount')
+        current = db.execute('SELECT revision FROM settlement_checks WHERE order_id=?', (order_id,)).fetchone()
+        if revision != (current['revision'] if current else 0):
+            raise ShopError('settlement_record_changed', 409)
+        values = (order_id, status, received_cents, received_date, note.strip(), now, revision + 1)
+        db.execute('''INSERT INTO settlement_checks(order_id,status,received_cents,received_date,note,checked_at,revision)
+            VALUES (?,?,?,?,?,?,?) ON CONFLICT(order_id) DO UPDATE SET status=excluded.status,
+            received_cents=excluded.received_cents,received_date=excluded.received_date,note=excluded.note,
+            checked_at=excluded.checked_at,revision=excluded.revision''', values)
+        db.execute('''INSERT INTO settlement_history(order_id,status,received_cents,received_date,note,checked_at,revision)
+            VALUES (?,?,?,?,?,?,?)''', values)
+    return order_detail(store, order_id)

@@ -52,6 +52,15 @@ class Store:
                 next_attempt INTEGER NOT NULL DEFAULT 0, claim_token TEXT NOT NULL DEFAULT '',
                 lease_until INTEGER NOT NULL DEFAULT 0, last_error TEXT NOT NULL DEFAULT '',
                 created_at INTEGER NOT NULL, sent_at INTEGER);
+              CREATE TABLE IF NOT EXISTS settlement_checks (
+                order_id TEXT PRIMARY KEY REFERENCES orders(id), status TEXT NOT NULL,
+                received_cents INTEGER, received_date TEXT, note TEXT NOT NULL DEFAULT '',
+                checked_at INTEGER NOT NULL, revision INTEGER NOT NULL);
+              CREATE TABLE IF NOT EXISTS settlement_history (
+                id INTEGER PRIMARY KEY, order_id TEXT NOT NULL REFERENCES orders(id),
+                status TEXT NOT NULL, received_cents INTEGER, received_date TEXT,
+                note TEXT NOT NULL DEFAULT '', checked_at INTEGER NOT NULL, revision INTEGER NOT NULL,
+                UNIQUE(order_id,revision));
             ''')
             if 'is_test' not in {r['name'] for r in db.execute('PRAGMA table_info(orders)')}:
                 db.execute('ALTER TABLE orders ADD COLUMN is_test INTEGER NOT NULL DEFAULT 0')

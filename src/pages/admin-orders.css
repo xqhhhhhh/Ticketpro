@@ -1,4 +1,32 @@
 .ad-shell{--ad-bg:#f5f6f8;--ad-ink:#192334;--ad-muted:#7a8493;--ad-line:#e7eaf0;--ad-accent:#286b52;min-height:100vh;background:var(--ad-bg);color:var(--ad-ink);font-family:"Avenir Next","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.5;font-size:13px;display:flex;text-align:left}
+.ad-settlement-summary{display:grid;grid-template-columns:1.45fr 1fr 1fr 1fr;gap:15px;padding:20px 22px;margin-top:17px;background:#fff;border:1px solid var(--ad-line);border-radius:9px;align-items:center}
+.ad-settlement-summary>div:first-child strong{display:block;font-size:12px;font-weight:550;color:#4d6357}
+.ad-settlement-summary>div:first-child>span{display:block;font-size:9px;color:#9aa79f;margin-top:5px}
+.ad-settlement-summary>div:not(:first-child){display:flex;justify-content:space-between;align-items:center;gap:7px;padding-left:15px;border-left:1px solid #ecf0ed}
+.ad-settlement-summary b{font-size:21px;font-weight:500;color:#56695d}
+.ad-settlement-summary b small{font-size:9px;font-weight:400;color:#a0aaa3;margin-left:4px}
+.ad-settlement-status{display:inline-flex;align-items:center;gap:5px;font-size:9px;white-space:nowrap}
+.ad-settlement-status i{width:4px;height:4px;border-radius:50%;background:currentColor}
+.ad-settlement-status.received{color:#438761}
+.ad-settlement-status.not_received{color:#b67d55}
+.ad-settlement-status.unverified{color:#8a969f}
+.ad-settlement-editor{padding:19px 18px;margin-top:25px;border:1px solid #e0e7e2;background:#fff;border-radius:7px}
+.ad-settlement-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ad-settlement-heading h4{font-size:12px;font-weight:550;color:#45634e}
+.ad-settlement-editor>p{font-size:10px;color:#8c9b91;line-height:1.9;margin:12px 0 16px}
+.ad-settlement-record{display:grid;gap:6px;font-size:10px;color:#87998c;margin-bottom:16px}
+.ad-settlement-record strong{font-size:14px;font-weight:500;color:#43815b}
+.ad-settlement-note{white-space:pre-wrap;overflow-wrap:anywhere}
+.ad-settlement-editor form{border-top:1px solid #e8eee9;padding-top:16px}
+.ad-settlement-editor label{display:block;color:#7b8f81;font-size:10px;margin-bottom:12px}
+.ad-settlement-editor select,.ad-settlement-editor input,.ad-settlement-editor textarea{display:block;width:100%;padding:9px;margin-top:6px;border:1px solid #dce5df;border-radius:5px;background:#fff;color:#4f6757;font-size:11px;max-width:100%}
+.ad-settlement-editor form>small{display:block;font-size:9px;color:#99a59d;line-height:1.8}
+.ad-settlement-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ad-settlement-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.ad-settlement-history{border-top:1px solid #e8eee9;margin-top:17px;padding-top:13px;color:#8b9b90;font-size:9px}
+.ad-settlement-history summary{cursor:pointer}
+.ad-settlement-history>div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:11px}
+@media(max-width:850px){.ad-settlement-summary{grid-template-columns:1fr 1fr 1fr;gap:13px;padding:17px}.ad-settlement-summary>div:first-child{grid-column:1/-1}.ad-settlement-summary>div:not(:first-child){padding-left:0;border-left:0}.ad-settlement-summary>div:first-child>span{margin-top:3px}}
 .ad-shell *{box-sizing:border-box}
 .ad-shell button,.ad-shell input,.ad-shell select{font:inherit}
 .ad-shell button{cursor:pointer}

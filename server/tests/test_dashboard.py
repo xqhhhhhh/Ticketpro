@@ -122,7 +122,7 @@ def test_reading_dashboard_does_not_mutate_orders_stock_or_notifications(merchan
     def snapshot():
         with store.connection() as db:
             return {table: [tuple(row) for row in db.execute('SELECT * FROM '+table)]
-                    for table in ('orders', 'stock', 'order_notifications')}
+                    for table in ('orders', 'stock', 'order_notifications', 'settlement_checks', 'settlement_history')}
     before = snapshot()
     for _ in range(3):
         assert get(client).status_code == 200
@@ -139,3 +139,107 @@ def test_legacy_order_table_migrates_without_changing_delivery_records(merchant)
     migrated = reopened.order(orders[0])
     assert migrated['is_test'] == 0 and migrated['trade_no'] == original['trade_no']
     assert migrated['status'] == 'delivered'
+
+
+def settlement(client, order_id, **changes):
+    return client.post('/commerce/api/admin/orders/'+order_id+'/settlement',
+                       json={'status': 'received', 'revision': 0, **changes}, headers=headers())
+
+
+def test_paid_orders_never_imply_actual_alipay_credit(merchant):
+    client, _, orders = merchant
+    data = get(client).json()
+    assert data['stats']['received_orders'] == 0
+    assert data['stats']['not_received_orders'] == 0
+    assert data['stats']['unverified_orders'] == 2
+    assert all(o['settlement_status'] == 'unverified' for o in data['orders'])
+    detail = client.get('/commerce/api/admin/orders/'+orders[0], headers=headers()).json()
+    assert detail['settlement']['source'] == 'unavailable'
+    assert detail['settlement']['received_cents'] is None
+    assert detail['settlement_history'] == []
+
+
+def test_owner_confirmation_records_actual_amount_without_changing_payment_or_delivery(merchant):
+    client, store, orders = merchant
+    before = store.order(orders[0])
+    with store.connection() as db:
+        stock = [tuple(r) for r in db.execute('SELECT * FROM stock')]
+        notifications = [tuple(r) for r in db.execute('SELECT * FROM order_notifications')]
+    result = settlement(client, orders[0], received_cents=6500, received_date='2026-10-22', note='账单核对 001')
+    assert result.status_code == 200
+    check = result.json()['settlement']
+    assert check['status'] == 'received' and check['source'] == 'merchant_check'
+    assert check['received_cents'] == 6500 and check['received_date'] == '2026-10-22'
+    assert check['note'] == '账单核对 001' and check['revision'] == 1
+    assert 'code' not in result.json()
+    assert store.order(orders[0]) == before
+    with store.connection() as db:
+        assert stock == [tuple(r) for r in db.execute('SELECT * FROM stock')]
+        assert notifications == [tuple(r) for r in db.execute('SELECT * FROM order_notifications')]
+    data = get(client).json()
+    assert data['stats']['received_orders'] == 1 and data['stats']['unverified_orders'] == 1
+    assert data['stats']['revenue'] == 13200
+
+
+def test_corrections_are_audited_and_do_not_invent_net_amounts(merchant):
+    client, _, orders = merchant
+    first = settlement(client, orders[0]).json()
+    assert first['settlement']['received_cents'] is None
+    second = settlement(client, orders[0], status='not_received', revision=1).json()
+    assert second['settlement']['status'] == 'not_received'
+    assert get(client).json()['stats']['not_received_orders'] == 1
+    third = settlement(client, orders[0], status='unverified', revision=2).json()
+    assert third['settlement']['status'] == 'unverified'
+    assert [h['revision'] for h in third['settlement_history']] == [3, 2, 1]
+    assert [h['status'] for h in third['settlement_history']] == ['unverified', 'not_received', 'received']
+    assert get(client).json()['stats']['unverified_orders'] == 2
+
+
+def test_stale_page_cannot_overwrite_another_confirmation(merchant):
+    client, _, orders = merchant
+    assert settlement(client, orders[0]).status_code == 200
+    stale = settlement(client, orders[0], status='not_received')
+    assert stale.status_code == 409
+    detail = client.get('/commerce/api/admin/orders/'+orders[0], headers=headers()).json()
+    assert detail['settlement']['status'] == 'received' and len(detail['settlement_history']) == 1
+
+
+@pytest.mark.parametrize('payload,expected', [
+    ({'received_cents': 6601}, 400), ({'received_cents': 0}, 422),
+    ({'status': 'not_received', 'received_cents': 6500}, 400),
+    ({'status': 'unverified', 'received_date': '2026-10-22'}, 400),
+    ({'received_date': '2026-99-99'}, 422), ({'status': 'settled_by_gateway'}, 422),
+    ({'cents': 1}, 422), ({'note': 'x'*301}, 422),
+])
+def test_invalid_confirmation_is_rejected(merchant, payload, expected):
+    client, _, orders = merchant
+    assert settlement(client, orders[0], **payload).status_code == expected
+    assert get(client).json()['stats']['received_orders'] == 0
+
+
+def test_unpaid_unknown_and_unauthorized_orders_cannot_be_marked_received(merchant):
+    client, _, orders = merchant
+    assert settlement(client, orders[2]).status_code == 400
+    assert settlement(client, 'unknown').status_code == 404
+    path = '/commerce/api/admin/orders/'+orders[0]+'/settlement'
+    assert client.post(path, json={'status': 'received', 'revision': 0}).status_code == 401
+    assert client.post(path, json={'status': 'received', 'revision': 0},
+                       headers={**headers(), 'Origin': 'https://untrusted.example'}).status_code == 403
+
+
+def test_competing_confirmations_commit_exactly_one_revision(merchant):
+    from concurrent.futures import ThreadPoolExecutor
+    from server.dashboard import record_settlement
+    from server.store import ShopError
+    _, store, orders = merchant
+    def write(status):
+        try:
+            record_settlement(store, orders[0], status=status, revision=0)
+            return 'saved'
+        except ShopError as error:
+            return error.status
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results = list(pool.map(write, ['received', 'not_received']))
+    assert results.count('saved') == 1 and results.count(409) == 1
+    with store.connection() as db:
+        assert db.execute('SELECT count(*) FROM settlement_history').fetchone()[0] == 1
