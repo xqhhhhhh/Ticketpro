@@ -1,0 +1,68 @@
+const main = (config) => {
+  // 需要几个 Melon Fleet 任务，就把这里改成几。
+  const TASK_COUNT = 10;
+
+  // 将生成 17891、17892、17893……，保留 FlClash 默认的 7890 不动。
+  const START_PORT = 17891;
+
+  const sourceProxies = Array.isArray(config.proxies) ? config.proxies : [];
+  const proxyNames = sourceProxies
+    .map((item) => (item && item.name ? String(item.name) : ""))
+    .filter((name) => name.length > 0);
+
+  if (proxyNames.length === 0) {
+    throw new Error("当前订阅没有可供 Melon 多端口使用的独立节点");
+  }
+
+  // Melon Fleet 仅通过本机回环地址调用 Mihomo 控制接口。
+  // 已配置控制地址时保留代理客户端自己的设置。
+  if (!config["external-controller"]) {
+    config["external-controller"] = "127.0.0.1:9090";
+  }
+
+  const groupNames = [];
+  const listenerNames = [];
+  for (let index = 0; index < TASK_COUNT; index += 1) {
+    const number = index + 1 < 10 ? `0${index + 1}` : `${index + 1}`;
+    groupNames.push(`MELON-TASK-${number}`);
+    listenerNames.push(`MELON-IN-${number}`);
+  }
+
+  const originalGroups = Array.isArray(config["proxy-groups"])
+    ? config["proxy-groups"]
+    : [];
+  const originalListeners = Array.isArray(config.listeners)
+    ? config.listeners
+    : [];
+
+  // 防止脚本重复应用时生成同名项目。
+  config["proxy-groups"] = originalGroups.filter(
+    (group) => !group || !groupNames.includes(group.name),
+  );
+  config.listeners = originalListeners.filter(
+    (listener) => !listener || !listenerNames.includes(listener.name),
+  );
+
+  for (let index = 0; index < TASK_COUNT; index += 1) {
+    const groupName = groupNames[index];
+
+    // 每个任务拥有一个单独的手动选择组。
+    config["proxy-groups"].push({
+      name: groupName,
+      type: "select",
+      proxies: proxyNames,
+    });
+
+    // 每个本地端口直接交给对应的选择组处理，不再走默认规则。
+    config.listeners.push({
+      name: listenerNames[index],
+      type: "mixed",
+      port: START_PORT + index,
+      listen: "127.0.0.1",
+      proxy: groupName,
+      users: [],
+    });
+  }
+
+  return config;
+};

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, Shield, Globe, Headphones, ArrowRight, Sparkles, MessageCircle, Check } from 'lucide-react';
@@ -14,6 +14,7 @@ import './App.css';
 import QRViewerModal from './components/QRViewerModal';
 
 const iconMap = { Zap, Shield, Globe, Headphones };
+const MelonProxyGuide = lazy(() => import('./pages/MelonProxyGuide'));
 
 function ClickableQR({ src, alt, style }) {
   const [viewingQR, setViewingQR] = useState(false);
@@ -357,20 +358,22 @@ function HomePage({ onAction }) {
 function AppContent() {
   const [modalConfig, setModalConfig] = useState(null);
   const isAdmin = useLocation().pathname.startsWith('/admin/');
+  const isGuide = useLocation().pathname.startsWith('/help/');
 
   return (
     <>
       <ScrollToTop />
       <div className="app-wrapper">
-        {!isAdmin && <Navbar />}
+        {!isAdmin && !isGuide && <Navbar />}
         <Routes>
           <Route path="/" element={<HomePage onAction={(p, type) => setModalConfig({ product: p, type })} />} />
           <Route path="/product/:id" element={<ProductDetail onAction={(p, type) => setModalConfig({ product: p, type })} />} />
           <Route path="/order/:id" element={<OrderPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/admin/orders" element={<AdminOrders />} />
+          <Route path="/help/melonfleet/proxy" element={<Suspense fallback={<p role="status" style={{ padding: '48px' }}>正在加载教程…</p>}><MelonProxyGuide /></Suspense>} />
         </Routes>
-        {!isAdmin && <Footer />}
+        {!isAdmin && !isGuide && <Footer />}
 
         <AnimatePresence>
           {modalConfig && (
