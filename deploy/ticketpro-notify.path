@@ -1,0 +1,9 @@
+[Unit]
+Description=Wake TicketPro merchant notifications after successful delivery
+
+[Path]
+PathChanged=/var/lib/ticketpro/notify.request
+Unit=ticketpro-notify.service
+
+[Install]
+WantedBy=multi-user.target

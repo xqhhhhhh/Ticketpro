@@ -46,6 +46,12 @@ class Store:
                 last_check INTEGER NOT NULL DEFAULT 0);
               CREATE INDEX IF NOT EXISTS stock_sku ON stock(product_id, days, state);
               CREATE INDEX IF NOT EXISTS orders_client ON orders(client_hash, created_at);
+              CREATE TABLE IF NOT EXISTS order_notifications (
+                order_id TEXT PRIMARY KEY REFERENCES orders(id),
+                status TEXT NOT NULL DEFAULT 'pending', attempts INTEGER NOT NULL DEFAULT 0,
+                next_attempt INTEGER NOT NULL DEFAULT 0, claim_token TEXT NOT NULL DEFAULT '',
+                lease_until INTEGER NOT NULL DEFAULT 0, last_error TEXT NOT NULL DEFAULT '',
+                created_at INTEGER NOT NULL, sent_at INTEGER);
             ''')
             mode = 'demo' if demo else 'production'
             previous = db.execute("SELECT value FROM shop_metadata WHERE key='mode'").fetchone()
@@ -132,13 +138,16 @@ class Store:
             except sqlite3.IntegrityError:
                 raise ShopError('transaction_conflict', 409) from None
             db.execute("UPDATE stock SET state='sold' WHERE order_id=?", (order_id,))
-        # Delivery commits first. A missed wake-up is recovered by the stock timer.
-        signal = os.getenv('TICKETPRO_RESTOCK_SIGNAL', '')
-        if signal:
-            try:
-                Path(signal).touch()
-            except OSError:
-                pass
+            db.execute('INSERT INTO order_notifications(order_id,created_at) VALUES (?,?)',
+                       (order_id, int(time.time())))
+        # Delivery and its notification event commit together; network calls run separately.
+        for name in ('TICKETPRO_RESTOCK_SIGNAL', 'TICKETPRO_NOTIFICATION_SIGNAL'):
+            signal = os.getenv(name, '')
+            if signal:
+                try:
+                    Path(signal).touch()
+                except OSError:
+                    pass
 
     def public_order(self, order):
         result = {k: order[k] for k in ('id', 'product_id', 'name', 'days', 'duration', 'cents', 'status', 'created_at', 'paid_at')}
@@ -210,4 +219,7 @@ class Store:
                 result['restock'] = [dict(r) for r in db.execute(
                     'SELECT id,product_id,days,quantity,status,attempts,next_attempt,last_error,created_at,completed_at '
                     'FROM restock_jobs ORDER BY created_at DESC,id DESC LIMIT 100')]
+            result['notifications'] = [dict(r) for r in db.execute(
+                'SELECT order_id,status,attempts,next_attempt,last_error,created_at,sent_at '
+                'FROM order_notifications ORDER BY created_at DESC,order_id DESC LIMIT 100')]
             return result

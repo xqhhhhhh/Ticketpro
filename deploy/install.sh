@@ -37,9 +37,15 @@ fi
 if [[ ! -e /etc/ticketpro.env ]]; then
   install -o root -g root -m 0600 "$bundle_dir/deploy/ticketpro.env.example" /etc/ticketpro.env
 fi
+if [[ ! -e /etc/ticketpro-notify.env ]]; then
+  install -o root -g root -m 0600 "$bundle_dir/deploy/ticketpro-notify.env.example" /etc/ticketpro-notify.env
+fi
 install -m 0644 "$bundle_dir"/deploy/*.service "$bundle_dir"/deploy/*.timer "$bundle_dir"/deploy/*.path /etc/systemd/system/
 if [[ ! -e /var/lib/ticketpro/restock.request ]]; then
   install -o ticketpro -g ticketpro-web -m 0600 /dev/null /var/lib/ticketpro/restock.request
+fi
+if [[ ! -e /var/lib/ticketpro/notify.request ]]; then
+  install -o ticketpro -g ticketpro-web -m 0600 /dev/null /var/lib/ticketpro/notify.request
 fi
 systemctl daemon-reload
 echo 'Backend installed. Existing environment and delivery database were preserved.'

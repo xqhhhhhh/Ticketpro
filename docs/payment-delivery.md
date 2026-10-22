@@ -118,6 +118,20 @@ systemctl start ticketpro-restock.service
 
 本次本机和生产 Python 环境均通过 88 项测试。使用与正式补货任务相同的 systemd 限制，在隔离订单库中真实验证了 Interpark 永久码、Ticketmaster 月卡和 NOL Fleet 专业版年卡：各补回 1 枚、恢复到 5，重复发货和再次运行均不多生成。未创建或修改真实付款，这 3 枚新码已保留为网站备用库存。验收后公网 64 个档位仍各有 5 枚可售，324 条库存记录包含 320 枚可售、3 枚备用与 1 枚已售测试码；原订单及其激活码保留，并再次备份。
 
+## 飞书商家订单提醒
+
+成功发货时，在同一数据库事务中写入一条 `order_notifications` 事件。每个订单只产生一条事件，未付款订单和已有历史订单不补发提醒。消息包含商品、期限、实付金额、订单号、确认时间和自动发货结果，不含激活码、买家领取密钥或支付凭据。
+
+独立的 `ticketpro-notify.service` 调用飞书群自定义机器人的 HTTPS Webhook；`ticketpro-notify.path` 监听成功发货信号，`ticketpro-notify.timer` 每 30 秒兜底。接口失败会退避重试，不影响买家发货和补货。工作进程用文件锁和数据库领取租约防止并行处理同一事件，发送成功须同时检查 HTTP 响应及飞书的 `code=0`。Webhook 不提供端到端幂等键；若飞书已收消息但回复丢失，或进程在发送后落库前退出，重试可能产生同订单号的重复提醒，不会重复发码。
+
+在 `/etc/ticketpro-notify.env` 配置 `TICKETPRO_FEISHU_WEBHOOK`；机器人开启签名校验时同时配置 `TICKETPRO_FEISHU_SECRET`。可用 `TICKETPRO_NOTIFICATION_TIMEZONE` 设置消息时区，当前默认 `Europe/Berlin`。环境文件 root 所有、权限 600，仅由通知服务加载，不进入前端或 Git。主服务的 `/etc/ticketpro.env` 设置 `TICKETPRO_NOTIFICATION_SIGNAL=/var/lib/ticketpro/notify.request`，信号文件属 `ticketpro:ticketpro-web`、权限 600。
+
+部署后，加载通知服务的两个环境文件，可运行 `python -m server.notifications --check` 检查配置和队列，`--test` 发送明确标注的接入测试消息（不创建订单、不消费库存、不改通知队列），然后启用 `ticketpro-notify.path` 和 `ticketpro-notify.timer`。`summary` 的 `notifications` 字段报告状态、次数、下次重试时间及脱敏原因；日志不输出 Webhook、签名密钥或原始上游异常。群机器人如启用关键词，关键词须包含消息中的 `TicketPro` 或 `订单通知`；IP 白名单须允许通知主机出口地址。
+
+协议依据：[飞书自定义机器人使用指南](https://open.feishu.cn/document/client-docs/bot-v3/add-custom-bot)。
+
+2026-10-22 已部署并启用通知服务、path 和 timer；用户提供的机器人已成功确认接收明确标注的接入测试。发货信号唤起任务、通知进程退出状态、公网正式检查及已有已售码保留均通过验证，没有补推历史已完成订单。本机及生产 Python 环境均通过 109 项后端测试，新增测试覆盖通知与发货事务一致性、重复发货、并发领取、崩溃租约恢复、失败重试、敏感信息脱敏、飞书业务错误、URL 限制与可选签名校验。
+
 ## 正式环境检查与备份
 
 下列命令要在服务端、加载正式服务的环境变量后执行：
