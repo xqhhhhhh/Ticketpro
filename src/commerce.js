@@ -10,16 +10,32 @@ const messages = {
 };
 
 export async function shopRequest(path, { key, ...options } = {}) {
-  const response = await fetch(`${apiBase}/commerce${path}`, {
-    ...options,
-    headers: { 'Content-Type': 'application/json', ...(key ? { Authorization: `Bearer ${key}` } : {}) },
+  let response;
+  try {
+    const timeout = AbortSignal.timeout(15000);
+    response = await fetch(`${apiBase}/commerce${path}`, {
+      ...options,
+      signal: options.signal ? AbortSignal.any([options.signal, timeout]) : timeout,
+      headers: { 'Content-Type': 'application/json', ...(key ? { Authorization: `Bearer ${key}` } : {}) },
+    });
+  } catch (cause) {
+    if (options.signal?.aborted) throw cause;
+    throw new Error('付款或订单服务暂时无法连接，请稍后重试，或联系微信客服并备注“付款问题”。');
+  }
+  const data = await response.json().catch(() => {
+    throw new Error('付款或订单服务返回异常，请联系微信客服并备注“付款问题”。');
   });
-  const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const detail = typeof data.detail === 'string' ? data.detail : '';
+    const detail = typeof data?.detail === 'string' ? data.detail : '';
     const error = new Error(messages[detail] || detail || '暂时无法连接订单服务，请稍后重试或联系微信客服。');
     error.status = response.status;
     throw error;
+  }
+  if (!data || typeof data !== 'object' ||
+      (path.startsWith('/api/orders') && (!/^\d{28}$/.test(data.id || '') || !['pending', 'delivered'].includes(data.status) ||
+        (data.status === 'delivered' && (typeof data.delivery?.code !== 'string' || !data.delivery?.tutorial_url)))) ||
+      (path === '/api/catalog' && !Array.isArray(data.products))) {
+    throw new Error('付款或订单信息暂时无法读取，请联系微信客服并备注“付款问题”。');
   }
   return data;
 }

@@ -6,7 +6,7 @@ import { afterEach, beforeEach, test } from 'node:test';
 // Only replace Vite's build-time environment; all checkout code runs unchanged.
 const sourcePath = process.env.TICKETPRO_COMMERCE_TEST_SOURCE || new URL('../src/commerce.js', import.meta.url);
 const source = (await readFile(sourcePath, 'utf8')).replaceAll('import.meta.env', '({ VITE_COMMERCE_API: "" })');
-const { placeOrder, savedOrders } = await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
+const { placeOrder, savedOrders, shopRequest } = await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
 const originalGlobals = new Map(['localStorage', 'fetch', 'crypto'].map(name => [name, Object.getOwnPropertyDescriptor(globalThis, name)]));
 let storage;
 let requests;
@@ -41,7 +41,7 @@ function pendingEntry(productId, days) {
 
 function succeed(index) {
   const { product_id, days } = requests[index].payload;
-  const order = { id: String(index + 1).padStart(28, '0'), product_id, days };
+  const order = { id: String(index + 1).padStart(28, '0'), product_id, days, status: 'pending' };
   requests[index].resolve({ ok: true, json: async () => order });
   return order;
 }
@@ -50,7 +50,7 @@ test('a lost response retries the same request and receipt key, then clears that
   const first = placeOrder('interpark', 30);
   const original = requests[0].payload;
   requests[0].reject(new Error('response lost'));
-  await assert.rejects(first, /response lost/);
+  await assert.rejects(first, /暂时无法连接/);
   const retry = placeOrder('interpark', 30);
   assert.deepEqual(requests[1].payload, original);
   const order = succeed(1);
@@ -71,7 +71,7 @@ for (const skus of [[['interpark', 30], ['melon', 30]], [['interpark', 15], ['in
       assert.ok(entry, 'the other SKU must retain its own recovery record');
       assert.equal(JSON.parse(entry[1]).request_id, original.request_id);
       requests[failed].reject(new Error('response lost after server committed'));
-      await assert.rejects(attempts[failed], /response lost/);
+      await assert.rejects(attempts[failed], /暂时无法连接/);
       const retry = placeOrder(...skus[failed]);
       assert.deepEqual(requests[2].payload, original);
       succeed(2);
@@ -91,7 +91,7 @@ test('a late success cannot clear a newer request for the same SKU', async () =>
   await oldAttempt;
   assert.deepEqual(JSON.parse(storage.get(storageKey)), newer);
   requests[1].reject(new Error('new response lost'));
-  await assert.rejects(newAttempt, /new response lost/);
+  await assert.rejects(newAttempt, /暂时无法连接/);
   const retry = placeOrder('interpark', 30);
   assert.deepEqual(requests[2].payload, newer);
   succeed(2);
@@ -106,7 +106,7 @@ test('a matching legacy v1 recovery migrates before sending and survives a faile
   assert.equal(storage.has('ticketpro.checkout.v1'), false);
   assert.deepEqual(JSON.parse(pendingEntry('interpark', 30)[1]), legacy);
   requests[0].reject(new Error('response lost'));
-  await assert.rejects(first, /response lost/);
+  await assert.rejects(first, /暂时无法连接/);
   const retry = placeOrder('interpark', 30);
   assert.deepEqual(requests[1].payload, legacy);
   succeed(1);
@@ -124,4 +124,39 @@ test('buying another SKU preserves the unmatched legacy recovery for later retry
   assert.deepEqual(requests[1].payload, legacy);
   succeed(1);
   await recovered;
+});
+
+for (const [name, response] of [
+  ['blank gateway page', () => new Response('')],
+  ['gateway HTML error page', () => new Response('<html>unavailable</html>', { status: 502 })],
+  ['missing order data', () => new Response('{}')],
+  ['incomplete delivery', () => new Response(JSON.stringify({ id: '1'.repeat(28), status: 'delivered' }))],
+]) {
+  test(`${name} shows a customer-facing error instead of accepting an unusable order`, async () => {
+    Object.defineProperty(globalThis, 'fetch', { configurable: true, value: async () => response() });
+    await assert.rejects(shopRequest('/api/orders/' + '1'.repeat(28)), /付款问题/);
+  });
+}
+
+test('payment service rejection preserves order recovery for a later retry', async () => {
+  const attempt = placeOrder('interpark', 15);
+  const pending = { ...requests[0].payload };
+  requests[0].resolve({ ok: false, status: 503, json: async () => ({ detail: 'payment_creation_rejected' }) });
+  await assert.rejects(attempt);
+  assert.deepEqual(JSON.parse(pendingEntry('interpark', 15)[1]), pending);
+  const retry = placeOrder('interpark', 15);
+  assert.deepEqual(requests[1].payload, pending);
+  succeed(1);
+  await retry;
+});
+
+test('timeout becomes a customer-facing error and caller cancellation remains AbortError', async () => {
+  Object.defineProperty(globalThis, 'fetch', { configurable: true, value: async () => {
+    throw new DOMException('timed out', 'TimeoutError');
+  } });
+  await assert.rejects(shopRequest('/api/catalog'), /付款问题/);
+  const controller = new AbortController();
+  controller.abort();
+  Object.defineProperty(globalThis, 'fetch', { configurable: true, value: async () => { throw controller.signal.reason; } });
+  await assert.rejects(shopRequest('/api/catalog', { signal: controller.signal }), { name: 'AbortError' });
 });

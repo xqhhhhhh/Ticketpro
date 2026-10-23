@@ -4,6 +4,7 @@ import { X, ArrowRight, ScanFace, LoaderCircle, Check, MessageCircle } from 'luc
 import { motion } from 'framer-motion';
 import { placeOrder, shopRequest } from '../commerce';
 import '../commerce.css';
+import PaymentHelp from './PaymentHelp';
 
 export default function CheckoutModal({ product, onClose, onContact }) {
   const navigate = useNavigate();
@@ -68,6 +69,7 @@ export default function CheckoutModal({ product, onClose, onContact }) {
       <div className="checkout-method"><ScanFace size={24} /><div><strong>支付宝付款</strong><span>每笔订单生成独立付款码</span></div><Check size={18} /></div>
       <div className="checkout-total"><span>本次支付</span><strong>¥{chosen ? (chosen.cents / 100).toFixed(2) : '—'}</strong></div>
       <p className="commerce-error" role="alert">{error || (catalog && !ready ? '当前档位尚未开放自动购买，请联系微信客服。' : '')}</p>
+      {(error || (catalog && !catalog.payment_ready)) && <PaymentHelp />}
       <button className="commerce-primary" disabled={!ready || busy} onClick={buy}>
         {busy ? <><LoaderCircle size={18} className="commerce-spin" /> 正在创建订单</> : <>创建订单并付款 <ArrowRight size={18} /></>}
       </button>

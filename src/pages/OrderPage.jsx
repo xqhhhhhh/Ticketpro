@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, Check, CheckCircle2, Copy, LoaderCircle, RefreshCw, ScanFace, BookOpen } from 'lucide-react';
 import QRCode from 'qrcode';
+import PaymentHelp from '../components/PaymentHelp';
 import { orderKey, receiptLink, rememberOrder, savedOrders, shopRequest } from '../commerce';
 import '../commerce.css';
 
@@ -16,18 +17,20 @@ function CopyButton({ value, children }) {
     {failed && <span className="commerce-error">复制失败，请手动选择并复制。</span>}</>;
 }
 
-function PaymentCode({ payment }) {
+function PaymentCode({ payment, orderId }) {
+  const [failedSource, setFailedSource] = useState(null);
   const [qr, setQr] = useState(null);
   const source = payment?.qrcode || payment?.payurl;
   useEffect(() => {
     if (!source || payment?.demo || payment?.img) return;
     let active = true;
-    QRCode.toDataURL(source, { width: 280, margin: 2 }).then(src => { if (active) setQr({ source, src }); }).catch(() => {});
+    QRCode.toDataURL(source, { width: 280, margin: 2 }).then(src => { if (active) setQr({ source, src }); }).catch(() => { if (active) setFailedSource(source); });
     return () => { active = false; };
   }, [source, payment]);
   const image = payment?.img || (qr?.source === source ? qr.src : null);
   if (payment?.demo) return <div className="order-demo"><ScanFace size={40} /><strong>本地模拟付款</strong><p>此订单不会扣款，发出的 DEMO 码仅用于验证流程。</p></div>;
-  return image ? <img className="order-qr" src={image} alt="该订单的支付宝付款二维码" /> : <div className="order-demo"><ScanFace size={40} /><p>请通过下方按钮打开付款页面。</p></div>;
+  if (failedSource && (failedSource === image || failedSource === source)) return <PaymentHelp orderId={orderId} />;
+  return image ? <img className="order-qr" src={image} onError={() => setFailedSource(image)} alt="该订单的支付宝付款二维码" /> : <div className="order-demo"><ScanFace size={40} /><p>请通过下方按钮打开付款页面。</p></div>;
 }
 
 export default function OrderPage() {
@@ -36,6 +39,7 @@ export default function OrderPage() {
   const [order, setOrder] = useState(null);
   const [error, setError] = useState('');
   const [checking, setChecking] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const current = order?.id === id ? order : null;
   useEffect(() => {
     if (!key) return;
@@ -90,16 +94,18 @@ export default function OrderPage() {
             <p className="commerce-muted">{current.delivery.binding_mode === 'machine' ? '此码需要绑定设备，请在准备使用的电脑上激活。' : '此码无需绑定设备。'}有效期和使用方式请以商品教程为准。</p>
             <div className="delivery-links"><a href={current.delivery.tutorial_url} target="_blank" rel="noopener noreferrer"><BookOpen size={21} /><span><strong>安装与使用教程</strong><small>打开飞书教程，按步骤安装和激活</small></span><ArrowUpRight size={18} /></a></div>
           </> : <>
+            {payment?.payurl || payment?.img || payment?.qrcode || payment?.demo ? <>
             <h2>支付宝扫码付款</h2>
-            <PaymentCode payment={payment} />
+            <PaymentCode payment={payment} orderId={id} />
             {payment?.payurl && <a className="commerce-primary" href={payment.payurl} target="_blank" rel="noopener noreferrer">{payment.demo ? '打开本地模拟付款' : '打开支付宝付款页'}<ArrowUpRight size={17} /></a>}
-            {!payment?.payurl && !payment?.img && !payment?.qrcode && <p className="commerce-notice">付款码暂未生成。请保存本订单并联系客服，勿重复下单。</p>}
+            </> : <><p className="commerce-notice">付款码暂时无法生成，请联系客服，勿重复下单。</p><PaymentHelp orderId={id} /></>}
+            {(payment?.payurl || payment?.img || payment?.qrcode) && <><button className="commerce-text-button" onClick={() => setShowHelp(value => !value)} aria-expanded={showHelp}>{showHelp ? '收起微信客服' : '付款遇到问题？联系微信客服'}</button>{showHelp && <PaymentHelp orderId={id} />}</>}
             <button className="commerce-text-button order-refresh" disabled={checking} onClick={checkPayment}><RefreshCw size={16} className={checking ? 'commerce-spin' : ''} />{checking ? '正在确认付款…' : '我已付款，检查结果'}</button>
             <p className="commerce-muted">确认到账后自动发货，无需发送付款截图。</p>
           </>}
         </section>
       </div>}
-    {error && <p className="commerce-error" role="alert">{error}</p>}
+    {error && <><p className="commerce-error" role="alert">{error}</p>{!delivered && <PaymentHelp orderId={id} />}</>}
   </main>;
 }
 

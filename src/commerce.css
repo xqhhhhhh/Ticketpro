@@ -91,3 +91,12 @@
   .checkout-total { margin:18px 0; }
   .checkout-foot { margin-top:16px; }
 }
+
+.payment-help { margin:22px 0; padding:24px 20px; border:1px solid #345d4e; border-radius:12px; background:#10231e; text-align:center; }
+.payment-help-title { display:flex; align-items:center; justify-content:center; gap:8px; color:#92e1be; }
+.payment-help h3 { font-size:1rem; margin:0; }
+.payment-help p { color:#c0d0ca; font-size:.85rem; line-height:1.8; margin:12px 0; overflow-wrap:anywhere; }
+.payment-help img { display:block; width:220px; max-width:100%; height:auto; margin:18px auto; padding:10px; background:#fff; border-radius:10px; }
+.payment-help>strong { color:#e4f4eb; font-size:.95rem; user-select:all; }
+.payment-help-note b { color:#a5f0ca; }
+.payment-help small { display:block; color:#a1b9ae; font-size:.78rem; line-height:1.7; }
