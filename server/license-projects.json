@@ -227,14 +227,16 @@
       "name": "UUTIX",
       "base_url": "https://api.nexuschat.top/uutix-helper",
       "api_type": "batch",
-      "console_key": "$TICKETPRO_STOCK_UUTIX_CONSOLE_KEY"
+      "console_key": "$TICKETPRO_STOCK_UUTIX_CONSOLE_KEY",
+      "upstream_url": "http://127.0.0.1:18116"
     },
     {
       "id": "ticketmelon",
       "name": "Ticketmelon",
       "base_url": "https://api.nexuschat.top/ticketmelon-helper",
       "api_type": "batch",
-      "console_key": "$TICKETPRO_STOCK_TICKETMELON_CONSOLE_KEY"
+      "console_key": "$TICKETPRO_STOCK_TICKETMELON_CONSOLE_KEY",
+      "upstream_url": "http://127.0.0.1:18117"
     }
   ]
 }
