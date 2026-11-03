@@ -282,6 +282,54 @@
     ]
   },
   {
+    "id": "uutix",
+    "name": "UUTIX 抢票捡漏插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 6600
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 9900
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 12800
+      }
+    ]
+  },
+  {
+    "id": "ticketmelon",
+    "name": "Ticketmelon 抢票捡漏插件",
+    "plans": [
+      {
+        "days": 30,
+        "label": "月付",
+        "duration": "1个月",
+        "cents": 6600
+      },
+      {
+        "days": 365,
+        "label": "年付",
+        "duration": "1年",
+        "cents": 9900
+      },
+      {
+        "days": 0,
+        "label": "买断",
+        "duration": "永久",
+        "cents": 12800
+      }
+    ]
+  },
+  {
     "id": "allticket",
     "name": "AllTicket 抢票捡漏插件",
     "plans": [

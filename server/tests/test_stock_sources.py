@@ -7,7 +7,7 @@ import pytest
 from server.stock_sources import SourceError, StockSource
 
 
-@pytest.mark.parametrize('kind', ['known', 'batch', 'simple', 'ibon', 'ticketplus', 'allticket', 'fleet'])
+@pytest.mark.parametrize('kind', ['known', 'batch', 'simple', 'ibon', 'ticketplus', 'ticket_helper', 'allticket', 'fleet'])
 def test_issuer_payloads_preserve_batch_days_and_single_device_mode(tmp_path, monkeypatch, kind):
     seen = []
     def handle(request):
@@ -49,3 +49,30 @@ def test_rejected_and_uncertain_generation_are_distinguished(tmp_path, monkeypat
     with pytest.raises(SourceError) as raised:
         source.generate({'days': 30, 'quantity': 1, 'batch': 'ticketpro-web:test'}, ['TEST-CODE'])
     assert raised.value.retry_safe is safe
+
+@pytest.mark.parametrize('days', [30, 365, 0])
+def test_ticket_helper_issuer_recovers_generated_batch_after_missing_response(tmp_path, monkeypatch, days):
+    path = tmp_path / 'helper.sqlite3'
+    with sqlite3.connect(path) as db:
+        db.execute('CREATE TABLE licenses(activation_code TEXT, batch TEXT)')
+        db.execute('INSERT INTO licenses VALUES (?, ?)', ('UNRELATED-CODE', 'manual-batch'))
+    batch = 'TICKETPRO_WEB_TEST'
+    c = {'kind': 'ticket_helper', 'base_url': 'https://helper.example.com',
+         'headers': {'X-Console-Key': 'project-secret'},
+         'recovery': {'db': str(path), 'table': 'licenses', 'code': 'activation_code', 'batch': 'batch'}}
+    source = StockSource(c, tmp_path)
+    job = {'id': 'a'*32, 'days': days, 'quantity': 1, 'batch': batch}
+    def handle(request):
+        assert request.url.path == '/console/api/generate'
+        assert request.headers['X-Console-Key'] == 'project-secret'
+        body = json.loads(request.content)
+        assert body == {'days': days, 'binding_mode': 'machine', 'count': 1, 'batch': batch}
+        with sqlite3.connect(path) as db:
+            db.execute('INSERT INTO licenses VALUES (?, ?)', ('PROJECT-ONLY-CODE', body['batch']))
+        raise httpx.ReadTimeout('reply lost after generation')
+    original = httpx.Client
+    monkeypatch.setattr(httpx, 'Client', lambda **kw: original(transport=httpx.MockTransport(handle), **kw))
+    with pytest.raises(SourceError) as raised:
+        source.generate(job)
+    assert raised.value.retry_safe is False
+    assert source.recover(job) == ['PROJECT-ONLY-CODE']

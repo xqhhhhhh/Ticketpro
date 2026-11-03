@@ -83,7 +83,7 @@ class StockSource:
             payload = {'count': count, 'days': days, 'prefix': 'TPWB', 'note': batch, 'binding_mode': 'machine'}
         elif kind == 'ibon':
             payload = {'prefix': 'TPWB', 'count': count, 'days': days, 'binding_mode': 'machine', 'notes': batch}
-        elif kind == 'ticketplus':
+        elif kind in {'ticketplus', 'ticket_helper'}:
             payload = {'days': days, 'binding_mode': 'machine', 'count': count, 'batch': batch}
         elif kind == 'allticket':
             path = '/api/admin/generate'

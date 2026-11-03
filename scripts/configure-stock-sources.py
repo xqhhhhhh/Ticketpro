@@ -89,6 +89,11 @@ def configure(write=False):
             source['kind'] = 'fleet'
         elif project_id == 'allticket-leofest':
             source['kind'] = 'allticket'
+        elif project_id in {'uutix', 'ticketmelon'}:
+            source['kind'] = 'ticket_helper'
+            name = 'TICKETPRO_STOCK_' + project_id.upper() + '_CONSOLE_KEY'
+            secrets[name] = env[project_id.upper() + '_CONSOLE_KEY']
+            source['headers'] = {'X-Console-Key': '$' + name}
         elif project_id in {'ticketplus', 'ibon'}:
             source['kind'] = project_id
         else:
@@ -113,7 +118,7 @@ def configure(write=False):
                     db_path = cwd / 'data' / filenames[project_id]
                 table = 'yes24_licenses' if project_id in {'yes24', 'yes24_kr'} else ('cityline_licenses' if project_id == 'cityline' else ('codes' if source['kind'] == 'allticket' else 'licenses'))
                 code_field = 'code' if source['kind'] in {'simple', 'allticket'} else 'activation_code'
-                batch_field = 'note' if source['kind'] == 'simple' else ('batch' if source['kind'] in {'allticket', 'ticketplus'} else 'notes')
+                batch_field = 'note' if source['kind'] == 'simple' else ('batch' if source['kind'] in {'allticket', 'ticketplus', 'ticket_helper'} else 'notes')
             with sqlite3.connect(db_path.resolve().as_uri() + '?mode=ro', uri=True) as db:
                 columns = {row[1] for row in db.execute('PRAGMA table_info(' + table + ')')}
                 assert {code_field, batch_field} <= columns

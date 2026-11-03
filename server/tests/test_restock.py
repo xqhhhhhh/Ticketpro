@@ -221,3 +221,18 @@ def test_import_preserves_previously_quarantined_codes(inventory):
     store.quarantine_stock('interpark', ['NOT-YET-IMPORTED'], manifest)
     store.import_stock([item('MANUAL-NEW', 'ticketpro-web:manual')], manifest)
     assert code_hash('NOT-YET-IMPORTED') in json.loads(manifest.read_text())['projects']['interpark']
+
+@pytest.mark.parametrize('project', ['uutix', 'ticketmelon'])
+@pytest.mark.parametrize('days', [30, 365, 0])
+def test_new_helpers_schedule_compatible_batches_and_keep_five_per_plan(tmp_path, project, days):
+    import re
+    store = Store(tmp_path / 'shop.db')
+    jobs = RestockJobs(store)
+    catalog = [{'id': project, 'plans': [{'days': days}]}]
+    assert jobs.schedule(catalog, {project: project})['scheduled'] == 1
+    job = jobs.due()[0]
+    assert re.fullmatch(r'[A-Za-z0-9._-]{1,80}', job['batch'])
+    assert job['batch'].startswith('TICKETPRO_WEB_')
+    assert job['project_id'] == project and job['days'] == days
+    assert job['quantity'] == job['target'] == 5
+    assert jobs.schedule(catalog, {project: project})['scheduled'] == 0

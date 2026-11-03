@@ -1,6 +1,46 @@
 // 各商品的价格档位；期限与售价按用户提供的信息维护。
 export const newProducts = [
   {
+    id: 'uutix',
+    name: 'UUTIX 抢票捡漏插件',
+    shortName: 'UUTIX',
+    description: '按场次、票价和张数选择票券，缺货时继续检查，购物车保留确认后提醒接手。',
+    longDescription: '面向 UUTIX 的 Chrome / Edge 购票辅助插件。在当前标签页提前启动，进入已适配的购票页后自动接管；可按优先顺序选择日期、时间、票价和 1–4 张票。目标明确缺货时按配置间隔检查，进入购物车后核对票券与实际递减的保留倒计时，确认后停止并提醒。登录、安全验证、收件资料、提交订单和付款由你完成。',
+    features: ['场次与票价优先级', '1–4 张票数量配置', '缺货间隔检查', '购物车保留与多端提醒'],
+    color: '#3f83df',
+    pricing: [
+      { label: '月付', duration: '1个月', price: 66 },
+      { label: '年付', duration: '1年', price: 99 },
+      { label: '买断', duration: '永久', price: 128 },
+    ],
+    highlights: [
+      { title: '在购票页自动接管', description: '支持从当前页识别场次，按日期、可选时间及票价关键词添加目标；多个目标按添加顺序尝试。' },
+      { title: '按张数检查余票', description: '支持 1–4 张，逐次调整网页数量并核对限购。仅在目标明确缺货时按间隔刷新，未知页面和验证阶段等待人工处理。' },
+      { title: '核对购物车保留', description: '购买后核对活动、场次、票价、张数与递减的保留倒计时，确认后停止；后续订单资料和付款由你接手。' },
+      { title: '独立运行与消息提醒', description: '多个标签页独立启停，运行中可修改配置；支持浏览器、声音、钉钉、飞书和 Telegram 提醒。' },
+    ],
+  },
+  {
+    id: 'ticketmelon',
+    name: 'Ticketmelon 抢票捡漏插件',
+    shortName: 'Ticketmelon',
+    description: '支持普通入场票与已适配日历场次，按日期和票档优先级选择，订单保留确认后提醒。',
+    longDescription: '面向 Ticketmelon 的 Chrome / Edge 购票辅助插件。支持普通入场票列表和已适配的日历活动，按目标日期、可选时间、票档关键词与数量选择票券；需要会员码时可填写并应用。启动后会按网站流程勾选向主办方共享账户信息并提交选票，核实目标票券和实际递减的保留倒计时后停止并提醒。登录、安全验证、特殊问卷及付款由你完成，需要选座的活动仍需单独适配。',
+    features: ['日期 / 时间与票档优先级', '会员码与数量配置', '售罄间隔检查', '订单保留与多端提醒'],
+    color: '#ef8c3b',
+    pricing: [
+      { label: '月付', duration: '1个月', price: 66 },
+      { label: '年付', duration: '1年', price: 99 },
+      { label: '买断', duration: '永久', price: 128 },
+    ],
+    highlights: [
+      { title: '日期与票档组合筛选', description: '按日期优先、票档次序选择普通入场票；已适配日历页可跨月选择日期和时间，每次选择一个目标票档。' },
+      { title: '会员码与数量配置', description: '支持填写会员码并等待网站应用成功，再按更新后的票档选票；可配置 1–20 张，实际数量以网站限购为准。' },
+      { title: '确认保留后停止', description: '核对票名、价格币种、数量及递减倒计时；无法核实时提示人工处理，不把提交选票等同于购票成功。' },
+      { title: '售罄检查与消息通知', description: '仅在目标明确售罄时按配置刷新，多标签页独立运行；支持浏览器、声音、钉钉、飞书和 Telegram 提醒。' },
+    ],
+  },
+  {
     id: 'allticket',
     name: 'AllTicket 抢票捡漏插件',
     shortName: 'AllTicket',

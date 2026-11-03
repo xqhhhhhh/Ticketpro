@@ -221,6 +221,20 @@
       "console_key": "$TICKETPRO_LICENSE_CONSOLE_KEY",
       "stock_adapter": "allticket",
       "admin_password": "$TICKETPRO_LICENSE_ADMIN_PASSWORD"
+    },
+    {
+      "id": "uutix",
+      "name": "UUTIX",
+      "base_url": "https://api.nexuschat.top/uutix-helper",
+      "api_type": "batch",
+      "console_key": "$TICKETPRO_STOCK_UUTIX_CONSOLE_KEY"
+    },
+    {
+      "id": "ticketmelon",
+      "name": "Ticketmelon",
+      "base_url": "https://api.nexuschat.top/ticketmelon-helper",
+      "api_type": "batch",
+      "console_key": "$TICKETPRO_STOCK_TICKETMELON_CONSOLE_KEY"
     }
   ]
 }

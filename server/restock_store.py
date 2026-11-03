@@ -43,7 +43,7 @@ class RestockJobs:
                         continue
                     job_id = secrets.token_hex(16)
                     prefix = 'TICKETPRO_WEB_'
-                    batch = (prefix + job_id[:32-len(prefix)].upper() if project in {'allticket-leofest', 'ticketplus'}
+                    batch = (prefix + job_id[:32-len(prefix)].upper() if project in {'allticket-leofest', 'ticketplus', 'uutix', 'ticketmelon'}
                              else 'ticketpro-web:auto-' + job_id)
                     db.execute('INSERT INTO restock_jobs(id,product_id,project_id,days,quantity,target,batch,created_at) VALUES (?,?,?,?,?,?,?,?)',
                                (job_id, product['id'], project, plan['days'], missing, target, batch, int(time.time())))
