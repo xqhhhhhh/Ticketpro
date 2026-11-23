@@ -18,6 +18,7 @@ class Settings:
     api_url: str = ''
     admin_key: str = ''
     dashboard_key: str = ''
+    guide_password_hash: str = ''
     demo: bool = False
     origins: tuple = ()
     trusted_proxy: bool = False
@@ -31,6 +32,7 @@ class Settings:
                    site_url=os.getenv('TICKETPRO_SITE_URL', '').rstrip('/'),
                    api_url=os.getenv('TICKETPRO_API_URL', '').rstrip('/'),
                    admin_key=os.getenv('TICKETPRO_ADMIN_KEY', ''),
+                   guide_password_hash=os.getenv('TICKETPRO_GUIDE_PASSWORD_HASH', ''),
                    dashboard_key=os.getenv('TICKETPRO_DASHBOARD_KEY', ''), demo=os.getenv('TICKETPRO_DEMO') == '1',
                    origins=tuple(filter(None, os.getenv('TICKETPRO_ORIGINS', '').split(','))),
                    trusted_proxy=os.getenv('TICKETPRO_TRUST_LOOPBACK_PROXY') == '1',

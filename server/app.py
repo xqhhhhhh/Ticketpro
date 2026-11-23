@@ -62,7 +62,7 @@ def create_app(settings=None, gateway=None):
     app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
     app.state.store, app.state.gateway = store, gateway
     app.state.settings = settings
-    app.include_router(build_router(store, settings.admin_key), prefix=PREFIX)
+    app.include_router(build_router(store, settings), prefix=PREFIX)
     origins = settings.origins or (('http://127.0.0.1:5173', 'http://localhost:5173') if settings.demo else ())
     app.add_middleware(CORSMiddleware, allow_origins=list(origins),
                        allow_methods=['GET', 'POST'], allow_headers=['Authorization', 'Content-Type'])

@@ -22,7 +22,7 @@ function Login({ onLogin }) {
       const draft = await readGuideDraft(key);
       onLogin({ key, draft });
     } catch (error) {
-      setError(error.status === 401 ? error.message : '无法连接教程后台，请稍后重试。');
+      setError([401, 429].includes(error.status) ? error.message : '无法连接教程后台，请稍后重试。');
     } finally {
       setBusy(false);
     }
@@ -34,7 +34,7 @@ function Login({ onLogin }) {
       <h1>Ticketlink 教程后台</h1>
       <p>登录后修改正文、插入图片和发布教程。</p>
       <form onSubmit={login}>
-        <label htmlFor="ticketlink-admin-password">商城管理员密钥</label>
+        <label htmlFor="ticketlink-admin-password">教程后台密码</label>
         <input id="ticketlink-admin-password" type="password" autoComplete="current-password"
           value={password} onChange={(event) => setPassword(event.target.value)} required />
         <button type="submit" className="tled-primary" disabled={busy}>{busy ? '正在登录…' : '登录'}</button>

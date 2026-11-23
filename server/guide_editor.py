@@ -1,9 +1,13 @@
+from collections import OrderedDict
 from datetime import datetime, timezone
-from hashlib import sha256
+from hashlib import scrypt, sha256
 from html.parser import HTMLParser
 from io import BytesIO
+from ipaddress import ip_address
 import re
 import secrets
+from threading import Lock
+from time import monotonic
 from urllib.parse import urlsplit
 
 from fastapi import APIRouter, Request, Response
@@ -132,7 +136,51 @@ def encode_image(data):
         raise ShopError('guide_invalid_image', 422) from exc
 
 
-def build_router(store, admin_key):
+def guide_authenticator(settings):
+    password_hash = settings.guide_password_hash
+    if password_hash and not re.fullmatch(r'[a-f0-9]{32}:[a-f0-9]{64}', password_hash):
+        raise ValueError('Invalid TICKETPRO_GUIDE_PASSWORD_HASH format')
+    salt, expected = (bytes.fromhex(part) for part in password_hash.split(':')) if password_hash else (b'', b'')
+    attempts = OrderedDict()
+    lock = Lock()
+
+    def authenticate(request):
+        header = request.headers.get('authorization', '')
+        if not password_hash:
+            if settings.admin_key and secrets.compare_digest(header.encode(), ('Bearer ' + settings.admin_key).encode()):
+                return
+            raise ShopError('unauthorized', 401)
+        if not header.startswith('Bearer ') or not 7 < len(header) <= 263:
+            raise ShopError('unauthorized', 401)
+
+        peer = request.client.host
+        if settings.trusted_proxy and peer in {'127.0.0.1', '::1'}:
+            try:
+                peer = str(ip_address(request.headers.get('x-real-ip', peer)))
+            except ValueError:
+                pass
+
+        with lock:
+            now = monotonic()
+            failures, expires = attempts.get(peer, (0, 0))
+            if now >= expires:
+                failures, expires = 0, now + 600
+            if failures >= 6:
+                raise ShopError('guide_login_limited', 429)
+            actual = scrypt(header[7:].encode(), salt=salt, n=2**14, r=8, p=1, dklen=32)
+            if not secrets.compare_digest(actual, expected):
+                attempts[peer] = (failures + 1, expires)
+                attempts.move_to_end(peer)
+                if len(attempts) > 2048:
+                    attempts.popitem(last=False)
+                raise ShopError('unauthorized', 401)
+            attempts.pop(peer, None)
+
+    return authenticate
+
+
+def build_router(store, settings):
+    authenticate = guide_authenticator(settings)
     router = APIRouter()
     with store.connection(write=True) as db:
         db.execute('''CREATE TABLE IF NOT EXISTS ticketlink_guide (
@@ -141,11 +189,6 @@ def build_router(store, admin_key):
         db.execute('INSERT OR IGNORE INTO ticketlink_guide(id) VALUES (1)')
         db.execute('''CREATE TABLE IF NOT EXISTS ticketlink_guide_images (
             id TEXT PRIMARY KEY, data BLOB NOT NULL, published INTEGER NOT NULL DEFAULT 0)''')
-
-    def authenticate(request):
-        header = request.headers.get('authorization', '')
-        if not admin_key or not secrets.compare_digest(header.encode(), ('Bearer ' + admin_key).encode()):
-            raise ShopError('unauthorized', 401)
 
     def status(db):
         return dict(db.execute('''SELECT draft_html AS html, revision, published_revision, published_at
@@ -228,19 +271,19 @@ def build_router(store, admin_key):
 
     @router.post(ADMIN_PATH + '/draft')
     async def save_draft(request: Request):
-        authenticate(request)
+        await run_in_threadpool(authenticate, request)
         payload = await read_document(request, Draft, DRAFT_LIMIT)
         return await run_in_threadpool(save, payload)
 
     @router.post(ADMIN_PATH + '/publish')
     async def publish_guide(request: Request):
-        authenticate(request)
+        await run_in_threadpool(authenticate, request)
         payload = await read_document(request, Revision, 1024)
         return await run_in_threadpool(publish, payload)
 
     @router.post(ADMIN_PATH + '/images')
     async def upload_image(request: Request):
-        authenticate(request)
+        await run_in_threadpool(authenticate, request)
         data = await read_limited(request, IMAGE_LIMIT)
         return await run_in_threadpool(store_image, data)
 

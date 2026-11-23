@@ -8,7 +8,8 @@ export const publicImageUrl = (id) => `${base}/help/ticketlink/images/${encodeUR
 const imageSelector = 'img[data-guide-image]';
 
 const errors = {
-  unauthorized: '管理员密钥无效，请重新登录。',
+  unauthorized: '教程后台密码错误，请重试。',
+  guide_login_limited: '尝试次数过多，请 10 分钟后重试。',
   guide_too_large: '内容超过大小限制。单张图片最多 5 MB。',
   request_too_large: '内容超过大小限制。单张图片最多 5 MB。',
   guide_invalid_image: '请选择静态 PNG、JPG 或 WebP 图片。',

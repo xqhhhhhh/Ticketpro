@@ -54,3 +54,21 @@ def test_ticketlink_draft_image_and_publication_lifecycle(tmp_path):
     assert client.post(ADMIN + '/publish', json={'revision': 2}, headers=AUTH).status_code == 200
     assert client.get(PUBLIC).json()['html'] == '<p>新草稿</p>'
     assert client.get(PUBLIC + '/images/' + image_id).status_code == 404
+
+
+def test_configured_guide_password_is_separate_and_rate_limited(tmp_path):
+    from hashlib import scrypt
+
+    salt = bytes(range(16))
+    expected = scrypt(b'guide-test-password', salt=salt, n=2**14, r=8, p=1, dklen=32)
+    settings = Settings(db=str(tmp_path / 'guide.sqlite3'), admin_key='test-guide-admin',
+                        guide_password_hash=f'{salt.hex()}:{expected.hex()}', tutorials='')
+    client = TestClient(create_app(settings))
+    guide = {'Authorization': 'Bearer guide-test-password'}
+    assert client.get(ADMIN, headers=AUTH).status_code == 401
+    assert client.get(ADMIN, headers=guide).status_code == 200
+    assert client.get('/commerce/api/admin/summary', headers=guide).status_code == 401
+    assert client.get('/commerce/api/admin/summary', headers=AUTH).status_code == 200
+    for _ in range(6):
+        assert client.get(ADMIN, headers=AUTH).status_code == 401
+    assert client.get(ADMIN, headers=guide).status_code == 429
