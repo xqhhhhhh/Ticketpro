@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, Shield, Globe, Headphones, ArrowRight, BookOpen, Sparkles, MessageCircle, Check } from 'lucide-react';
 import { products, features } from './data/products';
 import { hasPricing } from './data/pricing';
+import { guideName } from './guideEditor';
 import ProductDetail from './pages/ProductDetail';
 import ContactModal from './components/ContactModal';
 import CheckoutModal from './components/CheckoutModal';
@@ -74,13 +75,7 @@ function Navbar() {
           <Link to="/orders">订单查询</Link>
 
         </div>
-        <div className="nav-actions">
-          <Link to="/help" className="nav-guide-link">
-            <BookOpen size={16} aria-hidden="true" />
-            插件教程
-          </Link>
-          <a href="/#products" className="nav-cta">立即选购</a>
-        </div>
+        <a href="/#products" className="nav-cta">立即选购</a>
       </div>
     </nav>
   );
@@ -188,6 +183,12 @@ function ProductCard({ product, index, onAction }) {
           <button className="buy-btn" onClick={() => onAction(product, 'wechat')} style={{ background: '#07c160', color: '#fff' }}>
             联系我们
           </button>
+          {guideName(product.id) && (
+            <Link to={`/help/${product.id}`} className="buy-btn product-guide-link">
+              <BookOpen size={16} aria-hidden="true" />
+              查看教程
+            </Link>
+          )}
         </div>
       </div>
     </motion.div>
