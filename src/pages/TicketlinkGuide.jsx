@@ -5,9 +5,6 @@ import TicketlinkGuideContent from './TicketlinkGuideContent';
 import './ticketlink-guide.css';
 
 const sections = [
-  ["OEkOdVK3dogLLDxivYaclotXnme", "Ticketlink", 0],
-  ["XdTIdW6CqoATxAxczsucYzIIn4g", "0.写在前面", 0],
-  ["Y6JndZhBiohmuqxsiGfcyVkingc", "一、插件压缩包", 0],
   ["DE6kdiAG4ovB8PxfVImci7uqnzb", "二、插件教程", 0],
   ["JsZ5dFJKJoJZioxTexUcmT5JnMg", "1、安装教程", 1],
   ["XO7zdtfT3ou3Mpx9MzkcP35YnMd", "2、插件更新教程", 1],
@@ -47,7 +44,7 @@ export default function TicketlinkGuide() {
   return (
     <div className="tl-guide">
       <header className="tl-guide-header">
-        <span>Ticketlink</span>
+        <h1>Ticketlink</h1>
         <Link to="/">返回商品站</Link>
       </header>
       <div className="tl-guide-layout">

@@ -1,4 +1,4 @@
-import { Download, ExternalLink, FileArchive, Film } from 'lucide-react';
+import { ExternalLink, Film } from 'lucide-react';
 
 const sourceUrl = 'https://my.feishu.cn/wiki/NfBDwFYOcis6TNktLyjc7uvmnhc';
 
@@ -10,72 +10,22 @@ const telegramUpdateExample = JSON.stringify({
   }],
 }, null, 2);
 
-function Attachment({ name, size, href, download = false }) {
-  const FileIcon = download ? FileArchive : Film;
-  const ActionIcon = download ? Download : ExternalLink;
-
+function RecordingLink({ name, size, href }) {
   return (
-    <a
-      className="tl-guide-attachment"
-      href={href}
-      download={download || undefined}
-      target={download ? undefined : '_blank'}
-      rel={download ? undefined : 'noreferrer'}
-    >
-      <FileIcon aria-hidden="true" size={22} />
+    <a className="tl-guide-attachment" href={href} target="_blank" rel="noreferrer">
+      <Film aria-hidden="true" size={22} />
       <span>
         <strong>{name}</strong>
-        <small>{size} · {download ? '下载' : '在飞书播放'}</small>
+        <small>{size} · 在飞书播放</small>
       </span>
-      <ActionIcon aria-hidden="true" size={17} />
+      <ExternalLink aria-hidden="true" size={17} />
     </a>
-  );
-}
-
-function GuideVideo({ title, src, poster }) {
-  return (
-    <figure className="tl-guide-video">
-      <video controls playsInline preload="none" poster={poster} aria-label={title} src={src} />
-      <figcaption>{title}</figcaption>
-    </figure>
   );
 }
 
 export default function TicketlinkGuideContent() {
   return (
     <>
-      <h1 id="OEkOdVK3dogLLDxivYaclotXnme">Ticketlink</h1>
-      <p>安装、使用有任何问题都可以问我，安装后顺利运行觉得好用或者抢到票的话<span style={{ backgroundColor: "rgba(183,237,177,0.8)", color: "rgb(216,57,49)" }}>闲鱼好评、推荐朋友购买可返现（10-40元）</span></p>
-      <p>v：xxxxqqqhh  24小时咸鱼没回复再加哦，主要是为了之前在“一枚浙大本硕生”账号购买的顾客能够联系上我；添加时请备注购买日期</p>
-      <p className="tl-guide-space" aria-hidden="true"></p>
-      <p>售后群：售后不在闲鱼</p>
-      <img src="/help/ticketlink/images/support-group.jpg" alt="售后群二维码" width={1080} height={1596} style={{ width: 1080 }} loading="lazy" decoding="async" />
-      <p className="tl-guide-space" aria-hidden="true"></p>
-      <h2 id="XdTIdW6CqoATxAxczsucYzIIn4g">0.写在前面</h2>
-      <p><strong>任何运行有问题先按如下操作，如果还有问题可以私我，并说明已经试过开新的纯净浏览器了，否则不予回答：</strong></p>
-      <p><span style={{ backgroundColor: "rgb(251,191,188)" }}>有些chrome本身的设置可能会导致插件有些点击按键出问题（偶尔会有些用户碰到这样的问题），如果所有设置等都没问题，插件仍有问题，可以先根据多开浏览器教程处新开一个浏览器（这个chrome会和原本的chrome完全隔离，且是一个纯净的没有其他设置的浏览器），然后在这个新开的浏览器上试一下；如果还有问题的话，大家可以私我</span></p>
-      <p className="tl-guide-space" aria-hidden="true"></p>
-      <p><span style={{ backgroundColor: "rgb(255,165,61)" }}>该插件需要连接我的服务器，如果显示Faild to fetch或者激活码激活问题等信息，可能是网络问题，大家可以调试一下网络，用规则试一试等，使用期间也需要网络稳定哦</span></p>
-      <p className="tl-guide-space" aria-hidden="true"></p>
-      <p>视频教程(包含插件mac版正常运行案例)：</p>
-      <GuideVideo title="录屏2026-05-20 20.10.21.mov" src="/videos/ticketlink/latest.mp4" poster="/videos/ticketlink/poster.jpg" />
-      <p className="tl-guide-space" aria-hidden="true"></p>
-      <p>win版插件正常运行案例</p>
-      <GuideVideo
-        title="屏幕录制 2026-05-22 151510.mp4"
-        src="/help/ticketlink/videos/windows-demo.mp4"
-        poster="/help/ticketlink/videos/windows-demo.jpg"
-      />
-      <p className="tl-guide-space" aria-hidden="true"></p>
-      <h2 id="Y6JndZhBiohmuqxsiGfcyVkingc">一、插件压缩包</h2>
-      <p>如版本有更新，大家需要先删除原有文件，重新下载zip并解压到之前同样的位置，（比如原本解压后的文件放在桌面，那么就先删除这个文件，然后从这个文档里下载新的压缩包，解压到桌面）然后在chrome的拓展程序页面点击更新，这样操作可以保存原有的配置</p>
-      <blockquote>
-        <p>版本：20261123</p>
-        <Attachment name="ticketlink-helper-user-package.zip" size="184.86 KB" href="/help/ticketlink/ticketlink-helper-user-package.zip" download />
-        <p className="tl-guide-space" aria-hidden="true"></p>
-      </blockquote>
-      <p>ticketlink电脑版链接（插件只支持电脑版，不支持m开头的手机版）</p>
-      <p><a href="https://www.ticketlink.co.kr/global/zh/home">https://www.ticketlink.co.kr/global/zh/home</a></p>
       <h2 id="DE6kdiAG4ovB8PxfVImci7uqnzb">二、插件教程</h2>
       <h3 id="JsZ5dFJKJoJZioxTexUcmT5JnMg">1、安装教程</h3>
       <p>chrome浏览器下载链接</p>
@@ -83,7 +33,7 @@ export default function TicketlinkGuideContent() {
       <p>win不需要设置里进行隐私与安全设置，可以跳过那一部分直接看浏览器内操作（下方视频里是mac电脑，是需要隐私与安全设置进行修改的，win不需要）</p>
       <p>第一部分native-host操作完有个黑色窗口，请大家继续看视频，不用来问我这一步为什么黑色弹窗之后怎么做：之后如果是mac，就按照视频里系统设置里进行隐私与安全的设置；如果是win，直接到浏览器插件导入</p>
       <p>安装插件需要看这个视频，务必完整看完再说   视频展示的是mac，win需要和下方文字一起看：</p>
-      <Attachment name="录屏2026-05-25 18.27.38.mov" size="274.17 MB" href={`${sourceUrl}#Tng1dvdfgoyWPYx4kLXcEAZKncb`} />
+      <RecordingLink name="录屏2026-05-25 18.27.38.mov" size="274.17 MB" href={`${sourceUrl}#Tng1dvdfgoyWPYx4kLXcEAZKncb`} />
       <p><span style={{ color: "rgb(216,57,49)" }}>压缩包解压（务必确保已经解压，否则后续可能会有问题）</span>之后里面有两个文件夹，一个是extension，这个就是插件本身，需要导入到浏览器中；还有一个是native-host，这个是用于激活码绑定电脑用的，也就是插件中显示的本机组件（<span style={{ color: "rgb(216,57,49)" }}>插件中未显示本机组件已就绪就是因为你还没下载这个</span>）</p>
       <p>浏览器中都是导入extension这个文件夹（看视频），注意就是extension<span style={{ color: "rgb(216,57,49)" }}>整个文件夹（在浏览器导入的时候，选这个文件夹有可能会显示内容是空的，不用管，直接选就可以了）</span>，而不是里面任何一个文件或者文件夹</p>
       <p><strong>mac需要双击native-host中的Install-TicketlinkHelper-mac.command这个文件,win系统则是双击Install-TicketlinkHelper-windows这个文件</strong>。只需要激活之前双击一次就可以</p>
@@ -98,17 +48,17 @@ export default function TicketlinkGuideContent() {
       <img src="/help/ticketlink/images/native-host-ready.png" alt="插件内本机组件状态示例" width={620} height={432} style={{ width: 620 }} loading="lazy" decoding="async" />
       <h3 id="XO7zdtfT3ou3Mpx9MzkcP35YnMd">2、插件更新教程</h3>
       <blockquote>
-        <p>在使用过程中遇到问题和Bug时，可以回到本文档检查自己是否下载的是<strong>最新版本</strong>的插件</p>
+        <p>在使用过程中遇到问题和Bug时，请检查自己是否下载的是<strong>最新版本</strong>的插件</p>
       </blockquote>
       <p>1.删除旧的dist压缩包和dist文件夹。</p>
       <p>2.在Chrome浏览器中，点击插件右侧三个点，选择[从Chrome中移除]</p>
       <img src="/help/ticketlink/images/remove-extension.jpg" alt="Chrome 扩展菜单中的“从 Chrome 中移除”" width={1507} height={1004} style={{ width: 1507 }} loading="lazy" decoding="async" />
-      <p>3.在本文档中下载最新的dist压缩包并解压。</p>
+      <p>3.下载最新的插件压缩包并解压。</p>
       <p>4.余下步骤详见<strong>安装教程</strong>，流程相同。</p>
       <blockquote>
         <p>具体可见视频教程</p>
       </blockquote>
-      <Attachment name="录屏2026-02-21 14.52.46.mov" size="82.71 MB" href={`${sourceUrl}#VJ2vdLzmroLQIuxl0dUcJpxOnUX`} />
+      <RecordingLink name="录屏2026-02-21 14.52.46.mov" size="82.71 MB" href={`${sourceUrl}#VJ2vdLzmroLQIuxl0dUcJpxOnUX`} />
       <p className="tl-guide-space" aria-hidden="true"></p>
       <p>鼠标控制器后端更新的话，只需要将之前的文件删除，然后重新下载就可以</p>
       <hr />

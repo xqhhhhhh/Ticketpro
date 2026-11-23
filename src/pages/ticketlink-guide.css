@@ -31,6 +31,7 @@
   text-underline-offset: 3px;
 }
 
+.tl-guide-header h1 { font: inherit; }
 .tl-guide-header a { font-size: 14px; }
 
 .tl-guide-layout {
@@ -78,17 +79,13 @@
   overflow-wrap: anywhere;
 }
 
-.tl-guide-content :is(h1, h2, h3, h4, h5) {
+.tl-guide-content :is(h2, h3, h4, h5) {
   line-height: 1.35;
   scroll-margin-top: calc(var(--guide-header-height) + 24px);
 }
 
-.tl-guide-content h1 {
-  margin-bottom: 24px;
-  font-size: clamp(32px, 5vw, 42px);
-}
-
 .tl-guide-content h2 { margin: 32px 0 14px; font-size: 26px; }
+.tl-guide-content > h2:first-child { margin-top: 0; }
 .tl-guide-content h3 { margin: 24px 0 10px; font-size: 22px; }
 .tl-guide-content h4 { margin: 22px 0 8px; font-size: 20px; }
 .tl-guide-content h5 { margin: 20px 0 8px; font-size: 18px; }
@@ -158,21 +155,6 @@
 .tl-guide-attachment small {
   color: var(--guide-muted);
   font-size: 12px;
-}
-
-.tl-guide-video { margin-block: 12px 18px; }
-.tl-guide-video video {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  border-radius: 8px;
-  background: #15171a;
-}
-
-.tl-guide-video figcaption {
-  margin-top: 6px;
-  color: var(--guide-muted);
-  font-size: 13px;
 }
 
 .tl-guide-grid { display: flex; gap: 12px; }
