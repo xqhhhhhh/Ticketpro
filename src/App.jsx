@@ -15,6 +15,7 @@ import QRViewerModal from './components/QRViewerModal';
 
 const iconMap = { Zap, Shield, Globe, Headphones };
 const MelonProxyGuide = lazy(() => import('./pages/MelonProxyGuide'));
+const TicketlinkGuide = lazy(() => import('./pages/TicketlinkGuide'));
 
 function ClickableQR({ src, alt, style }) {
   const [viewingQR, setViewingQR] = useState(false);
@@ -372,6 +373,7 @@ function AppContent() {
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/admin/orders" element={<AdminOrders />} />
           <Route path="/help/melonfleet/proxy" element={<Suspense fallback={<p role="status" style={{ padding: '48px' }}>正在加载教程…</p>}><MelonProxyGuide /></Suspense>} />
+          <Route path="/help/ticketlink" element={<Suspense fallback={<p role="status" style={{ padding: '48px' }}>正在加载教程…</p>}><TicketlinkGuide /></Suspense>} />
         </Routes>
         {!isAdmin && !isGuide && <Footer />}
 
