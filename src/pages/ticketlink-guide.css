@@ -74,6 +74,15 @@
 
 .tl-guide-nav a[aria-current] { border-inline-start-color: var(--guide-link); }
 
+.tl-guide-loading {
+  min-height: 100vh;
+  padding: 48px;
+  background: #fff;
+  color: #1f2329;
+}
+
+.tl-guide-layout > .tl-guide-content:only-child { grid-column: 1 / -1; }
+
 .tl-guide-content {
   min-width: 0;
   overflow-wrap: anywhere;
@@ -131,7 +140,7 @@
 
 .tl-guide .tl-guide-attachment {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
   max-width: 420px;
@@ -143,6 +152,7 @@
   text-decoration: none;
 }
 
+.tl-guide-attachment::after { content: "↗"; }
 .tl-guide-attachment:hover { background: #f3f6fc; }
 
 .tl-guide-attachment strong,

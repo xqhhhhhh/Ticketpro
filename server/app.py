@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse
 from pydantic import BaseModel, ConfigDict, Field
 
+from .guide_editor import WRITE_LIMITS, build_router
 from .gateway import GatewayError, Zpay, cents, verified_payment, verify_signature
 from .store import ShopError, Store
 from .tutorials import load_tutorials
@@ -61,6 +62,7 @@ def create_app(settings=None, gateway=None):
     app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
     app.state.store, app.state.gateway = store, gateway
     app.state.settings = settings
+    app.include_router(build_router(store, settings.admin_key), prefix=PREFIX)
     origins = settings.origins or (('http://127.0.0.1:5173', 'http://localhost:5173') if settings.demo else ())
     app.add_middleware(CORSMiddleware, allow_origins=list(origins),
                        allow_methods=['GET', 'POST'], allow_headers=['Authorization', 'Content-Type'])
@@ -77,7 +79,8 @@ def create_app(settings=None, gateway=None):
             length = int(request.headers.get('content-length', '0') or '0')
         except ValueError:
             return JSONResponse({'detail': 'invalid_content_length'}, status_code=400)
-        if length > 16384 or len(request.url.query) > 8192:
+        limit = WRITE_LIMITS.get(request.url.path.removeprefix(PREFIX), 16384) if request.method == 'POST' else 16384
+        if not 0 <= length <= limit or len(request.url.query) > 8192:
             return JSONResponse({'detail': 'request_too_large'}, status_code=413)
         response = await call_next(request)
         # HTML form navigations with no-referrer can send Origin:null. Demo forms

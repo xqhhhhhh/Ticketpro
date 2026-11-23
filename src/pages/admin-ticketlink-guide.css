@@ -1,0 +1,98 @@
+.tled {
+  min-height: 100vh;
+  background: #eef1f6;
+  color: #192238;
+  font: 15px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.tled-top, .tled-workbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px clamp(16px, 4vw, 48px);
+}
+
+.tled-top { background: #18243d; color: #fff; font-weight: 600; }
+.tled-top a { display: inline-flex; align-items: center; gap: 5px; color: inherit; }
+.tled-top a:last-child { font-size: 13px; color: #e1e9ff; }
+
+.tled-workbar {
+  position: sticky;
+  z-index: 3;
+  top: 0;
+  flex-wrap: wrap;
+  background: #fff;
+  border-bottom: 1px solid #dce3ee;
+}
+
+.tled-workbar strong { display: block; font-size: 17px; }
+.tled-workbar small { display: block; color: #566681; font-size: 12px; }
+.tled-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.tled :is(.tled-login, .tled-actions, .tled-tools) button, .tled-tools select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border: 1px solid #d6e0ef;
+  border-radius: 6px;
+  color: #263854;
+  background: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tled :is(.tled-login, .tled-actions, .tled-tools) button:hover:not(:disabled), .tled-tools select:hover { background: #eef4ff; }
+.tled :is(.tled-login, .tled-actions, .tled-tools) button:disabled { cursor: default; opacity: .52; }
+.tled :is(.tled-login, .tled-actions, .tled-tools) button.tled-primary { border-color: #254fbd; background: #254fbd; color: #fff; font-weight: 600; }
+.tled :is(.tled-login, .tled-actions, .tled-tools) button.tled-primary:hover:not(:disabled) { background: #193e9a; }
+
+.tled-login, .tled-sheet {
+  margin: clamp(20px, 5vw, 48px) auto;
+  background: #fff;
+  border: 1px solid #dce3ee;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px #192d510d;
+}
+
+.tled-login { width: min(420px, calc(100% - 32px)); padding: 32px; }
+.tled-lock {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 18px;
+  border-radius: 10px;
+  background: #eaf0ff;
+  color: #254fbd;
+}
+.tled-login h1 { font-size: 25px; line-height: 1.35; }
+.tled-login p { margin-top: 8px; color: #566681; }
+.tled-login form { display: grid; gap: 8px; margin-top: 22px; }
+.tled-login input {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid #ccd7e8;
+  border-radius: 6px;
+  background: #f9fbff;
+  color: inherit;
+  font: inherit;
+}
+.tled-login form button { margin-top: 6px; }
+
+.tled-sheet { width: min(920px, calc(100% - 32px)); margin-block: 20px 60px; }
+.tled-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 16px; border-bottom: 1px solid #dce3ee; }
+.tled-tools > div { display: flex; flex-wrap: wrap; gap: 4px; }
+.tled-tools button, .tled-tools select { padding: 6px 8px; font-size: 14px; }
+
+.tled-document { min-height: 58vh; padding: clamp(20px, 5vw, 60px); color: #1f2329; font-size: 16px; }
+.tled-document:focus { outline: 2px solid #254fbd; outline-offset: -2px; border-radius: 0 0 12px 12px; }
+.tled-document > :first-child { margin-top: 0; }
+.tled .tled-feedback { padding: 8px clamp(16px, 4vw, 48px); color: #254375; background: #e2eaff; }
+.tled .tled-error { color: #a1182b; }
+.tled .tled-feedback.tled-error { background: #ffedf0; }
+.tled > .tl-guide { min-height: 75vh; --guide-header-height: 110px; }
+.tled > .tl-guide .tl-guide-header { position: static; min-height: 54px; }
+.tled > .tl-guide .tl-guide-header span { color: #566681; font-size: 13px; }
