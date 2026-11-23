@@ -1,8 +1,9 @@
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Check, Star, Play, MessageCircle, ArrowRight, Image, ScanFace } from 'lucide-react';
+import { ArrowLeft, BookOpen, Check, Star, Play, MessageCircle, ArrowRight, Image, ScanFace } from 'lucide-react';
 import { hasPricing } from '../data/pricing';
 import { products } from '../data/products';
+import { guideName } from '../guideEditor';
 
 function hexToRgba(hex, alpha) {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -63,6 +64,13 @@ export default function ProductDetail({ onAction }) {
                 )}
                 <h1>{product.name}</h1>
                 <p className="detail-long-desc">{product.longDescription}</p>
+                {guideName(product.id) && (
+                  <Link to={`/help/${product.id}`} className="detail-guide-link">
+                    <BookOpen size={16} aria-hidden="true" />
+                    查看使用教程
+                    <ArrowRight size={15} aria-hidden="true" />
+                  </Link>
+                )}
                 {hasPricing(product) ? <div className={`detail-pricing-tiers ${product.pricing.length > 3 ? 'many-tiers' : ''}`}>
                   {product.pricing.map((tier, i) => (
                     <div key={i} className={`detail-tier ${tier.badge ? 'recommended' : ''}`}>

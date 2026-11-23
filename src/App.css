@@ -660,6 +660,23 @@
 }
 
 .detail-price-pending { max-width: 640px; }
+.detail-guide-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.detail-guide-link:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .detail-purchase-actions {
   display: flex;
   gap: 16px;

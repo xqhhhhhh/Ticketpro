@@ -1,7 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Shield, Globe, Headphones, ArrowRight, Sparkles, MessageCircle, Check } from 'lucide-react';
+import { Zap, Shield, Globe, Headphones, ArrowRight, BookOpen, Sparkles, MessageCircle, Check } from 'lucide-react';
 import { products, features } from './data/products';
 import { hasPricing } from './data/pricing';
 import ProductDetail from './pages/ProductDetail';
@@ -74,7 +74,13 @@ function Navbar() {
           <Link to="/orders">订单查询</Link>
 
         </div>
-        <a href="/#products" className="nav-cta">立即选购</a>
+        <div className="nav-actions">
+          <Link to="/help" className="nav-guide-link">
+            <BookOpen size={16} aria-hidden="true" />
+            插件教程
+          </Link>
+          <a href="/#products" className="nav-cta">立即选购</a>
+        </div>
       </div>
     </nav>
   );
