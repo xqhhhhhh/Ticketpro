@@ -198,3 +198,23 @@
   .tl-guide-nav > div { max-height: min(50dvh, 360px); overflow: auto; }
   .tl-guide-grid { display: block; }
 }
+
+.tl-guide-directory {
+  max-width: 1060px;
+  margin: auto;
+  padding: 44px clamp(20px, 4vw, 56px) 80px;
+}
+
+.tl-guide-directory h2 { margin-bottom: 22px; font-size: 30px; }
+.tl-guide-directory ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 10px; list-style: none; }
+.tl-guide-directory li a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 17px;
+  border: 1px solid var(--guide-border);
+  border-radius: 7px;
+  text-decoration: none;
+}
+.tl-guide-directory li a:hover { background: #f3f6fc; }

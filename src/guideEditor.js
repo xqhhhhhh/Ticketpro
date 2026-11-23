@@ -1,10 +1,13 @@
-import defaultGuide from './data/tutorials/ticketlink.html?raw';
+import guideNames from './data/tutorials/guide-index.json';
 
-export { defaultGuide };
+export const guides = Object.entries(guideNames).map(([slug, name]) => ({ slug, name }));
+export const guideName = (slug) => Object.hasOwn(guideNames, slug) ? guideNames[slug] : '';
+const seedImports = import.meta.glob('./data/tutorials/*.html', { query: '?raw', import: 'default' });
+export const readGuideSeed = (slug) => seedImports[`./data/tutorials/${slug}.html`]?.();
 
 const base = `${(import.meta.env.VITE_COMMERCE_API || '').replace(/\/$/, '')}/commerce/api`;
-const adminPath = '/admin/ticketlink';
-export const publicImageUrl = (id) => `${base}/help/ticketlink/images/${encodeURIComponent(id)}`;
+const guidePath = (slug) => `/admin/guides/${encodeURIComponent(slug)}`;
+export const publicImageUrl = (slug, id) => `${base}/help/${encodeURIComponent(slug)}/images/${encodeURIComponent(id)}`;
 const imageSelector = 'img[data-guide-image]';
 
 const errors = {
@@ -40,13 +43,14 @@ async function request(path, { key, body, signal, image = false } = {}) {
   return image ? response.blob() : response.json();
 }
 
-export const readPublishedGuide = (signal) => request('/help/ticketlink', { signal });
-export const readGuideDraft = (key) => request(adminPath, { key });
-export const saveGuideDraft = (key, revision, html) => request(adminPath + '/draft', { key, body: { revision, html } });
-export const publishGuide = (key, revision) => request(adminPath + '/publish', { key, body: { revision } });
-export const uploadGuideImage = (key, file) => request(adminPath + '/images', { key, body: file });
-export const readDraftImage = (key, id, signal) =>
-  request(`${adminPath}/images/${encodeURIComponent(id)}`, { key, signal, image: true });
+export const readPublishedGuide = (slug, signal) => request(`/help/${encodeURIComponent(slug)}`, { signal });
+export const readGuideIndex = (key) => request('/admin/guides', { key });
+export const readGuideDraft = (slug, key) => request(guidePath(slug), { key });
+export const saveGuideDraft = (slug, key, revision, html) => request(guidePath(slug) + '/draft', { key, body: { revision, html } });
+export const publishGuide = (slug, key, revision) => request(guidePath(slug) + '/publish', { key, body: { revision } });
+export const uploadGuideImage = (slug, key, file) => request(guidePath(slug) + '/images', { key, body: file });
+export const readDraftImage = (slug, key, id, signal) =>
+  request(`${guidePath(slug)}/images/${encodeURIComponent(id)}`, { key, signal, image: true });
 
 function fragment(html) {
   const template = document.createElement('template');
@@ -59,7 +63,7 @@ function getSections(template) {
   return [...template.content.querySelectorAll('h2,h3,h4,h5')].flatMap((heading, index) => {
     const title = heading.textContent.trim();
     if (!title) return [];
-    const proposedId = heading.id || `ticketlink-section-${index + 1}`;
+    const proposedId = heading.id || `guide-section-${index + 1}`;
     let id = proposedId;
     let suffix = 1;
     while (ids.has(id)) id = `${proposedId}-${suffix++}`;

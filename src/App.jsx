@@ -16,6 +16,7 @@ import QRViewerModal from './components/QRViewerModal';
 const iconMap = { Zap, Shield, Globe, Headphones };
 const MelonProxyGuide = lazy(() => import('./pages/MelonProxyGuide'));
 const TicketlinkGuide = lazy(() => import('./pages/TicketlinkGuide'));
+const GuideDirectory = lazy(() => import('./pages/TicketlinkGuide').then(module => ({ default: module.GuideDirectory })));
 const AdminTicketlinkGuide = lazy(() => import('./pages/AdminTicketlinkGuide'));
 
 function ClickableQR({ src, alt, style }) {
@@ -360,7 +361,7 @@ function HomePage({ onAction }) {
 function AppContent() {
   const [modalConfig, setModalConfig] = useState(null);
   const isAdmin = useLocation().pathname.startsWith('/admin/');
-  const isGuide = useLocation().pathname.startsWith('/help/');
+  const isGuide = /^\/help(?:\/|$)/.test(useLocation().pathname);
 
   return (
     <>
@@ -373,13 +374,14 @@ function AppContent() {
           <Route path="/order/:id" element={<OrderPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/admin/orders" element={<AdminOrders />} />
-          <Route path="/admin/help/ticketlink" element={
+          <Route path="/admin/help/:slug?" element={
             <Suspense fallback={<p className="tl-guide-loading" role="status">正在加载教程后台…</p>}>
               <AdminTicketlinkGuide />
             </Suspense>
           } />
           <Route path="/help/melonfleet/proxy" element={<Suspense fallback={<p role="status" style={{ padding: '48px' }}>正在加载教程…</p>}><MelonProxyGuide /></Suspense>} />
-          <Route path="/help/ticketlink" element={<Suspense fallback={<p role="status" style={{ padding: '48px' }}>正在加载教程…</p>}><TicketlinkGuide /></Suspense>} />
+          <Route path="/help" element={<Suspense fallback={<p role="status">正在加载教程…</p>}><GuideDirectory /></Suspense>} />
+          <Route path="/help/:slug" element={<Suspense fallback={<p role="status" style={{ padding: '48px' }}>正在加载教程…</p>}><TicketlinkGuide /></Suspense>} />
         </Routes>
         {!isAdmin && !isGuide && <Footer />}
 

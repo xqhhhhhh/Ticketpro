@@ -1,0 +1,70 @@
+<h2 id="Zjh5dc1YXoenVbxF0P7cr79Inzb">二、插件教程</h2>
+<h3 id="NSoed2K3toCFKHxJBeMckfHSnLh">1、安装教程</h3>
+<p>chrome下载地址</p>
+<p><a href="https://www.google.com/chrome/" rel="noopener noreferrer">https://www.google.com/chrome/</a></p>
+<p>win不需要设置里进行隐私与安全设置，可以跳过那一部分直接看浏览器内操作（下方视频里是mac电脑，是需要隐私与安全设置进行修改的，win不需要）</p>
+<p>第一部分native-host操作完有个黑色窗口，请大家继续看视频，不用来问我这一步为什么黑色弹窗之后怎么做：之后如果是mac，就按照视频里系统设置里进行隐私与安全的设置；如果是win，直接到浏览器插件导入</p>
+<a class="tl-guide-attachment" href="https://my.feishu.cn/wiki/YF9Bw6kuyiteERkOfegcKYM1nyb?from=from_copylink#COfXdUQe5otKTwxIbjhcrMVpnuh" target="_blank" rel="noopener noreferrer"><span><strong>录屏2026-05-25 18.27.38.mov</strong><small>274.17 MB · 在飞书播放</small></span></a>
+<p>浏览器中都是导入extension这个文件夹</p>
+<p>mac需要双击Install-GalaxyTicketingHelper-mac.command这个文件,win则是双击Install-GalaxyTicketingHelper-windows.bat这个文件。只需要激活之前双击一次就可以</p>
+<img src="/help/guides/images/805d885cd9b1d39e0e649f52.webp" alt="教程截图" width="1944" height="796" style="width:610px" loading="lazy" decoding="async">
+<img src="/help/guides/images/fc2b4a365e1db34a4bfb2283.webp" alt="教程截图" width="1442" height="450" style="width:646px" loading="lazy" decoding="async">
+<img src="/help/guides/images/27eb05ff967975d7ac9c5416.webp" alt="教程截图" width="1160" height="582" style="width:642px" loading="lazy" decoding="async">
+<img src="/help/guides/images/3b4618d1d0704b7d5e0dffe5.webp" alt="教程截图" width="620" height="432" style="width:620px" loading="lazy" decoding="async">
+<p>激活码常见问题：激活码输入后一直显示激活中：这是因为你没连上我服务器，可以切一切节点或者关一下梯子；如果还是不行可以跟我说一下情况</p>
+<p class="tl-guide-space" aria-hidden="true"></p>
+<h3 id="TfUDdvGSTo2VKxxIYOscBT9cnPK">2、插件更新教程</h3>
+<blockquote><p>在使用过程中遇到问题和Bug时，可以回到本文档检查自己是否下载的是<strong>最新版本</strong>的插件</p></blockquote>
+<p>1.删除旧的dist压缩包和dist文件夹。</p>
+<p>2.在Chrome浏览器中，点击插件右侧三个点，选择[从Chrome中移除]</p>
+<img src="/help/guides/images/f1435ff70a0ef4618fe32870.webp" alt="教程截图" width="1507" height="1004" style="width:1507px" loading="lazy" decoding="async">
+<p>3.在本文档中下载最新的dist压缩包并解压。</p>
+<p>4.余下步骤详见<strong>安装教程</strong>，流程相同。</p>
+<blockquote><p>具体可见视频教程</p></blockquote>
+<a class="tl-guide-attachment" href="https://my.feishu.cn/wiki/YF9Bw6kuyiteERkOfegcKYM1nyb?from=from_copylink#AsSNdfcGxonO8Jx6faWc9r4Bnuc" target="_blank" rel="noopener noreferrer"><span><strong>录屏2026-02-21 14.52.46.mov</strong><small>82.71 MB · 在飞书播放</small></span></a>
+<p class="tl-guide-space" aria-hidden="true"></p>
+<hr>
+<h2 id="GNKRdN7hwoVxO8xX56qcd3c5ncd">三、使用教程</h2>
+<p><span style="color:rgb(216, 57, 49)">大家银河平台语言用简体中文</span></p>
+<h3 id="AJ1VdlASaoFAsVxm068cP2QJnhb">捡漏模式</h3>
+<p>整体逻辑是输入商品页的url，然后点击插件的启动，插件就会自动从商品页开始自动运行，然后选择你配置里填写的场次、票价类型，购买数量、然后自动点击立即购买，之后自动勾选相关须知，锁票；如果没有满足要求的票的话就会自动刷新页面（刷新间隔可以自定义，即区域售罄重试间隔）；然后也可以设置一轮运行的上限时长，即单次循环上限，到达这个时间后，会自动再从商品页开始进行运行；直到有空位并锁上。锁到票的话电脑会持续发出滴滴滴的声音、钉钉也会收到消息，以此提醒用户在5min内进行付款。</p>
+<h3 id="BxQ1du0a4oVlBSxD05Yczsptnbe">抢票模式</h3>
+<p>抢票模式的原理是插件识别到当前进入到了选场次、选票价类型的那个界面后，会自动进行接管，并进行后续操作；即根据配置选座位，没有座位就自动刷新找座位，直到选到票</p>
+<p>抢票模式有一个<strong>自动刷新商品页并点击立即购买</strong></p>
+<p>这个功能不开启的话，需要你手动进入排队界面，更推荐这样做其实，如果你只开了一个窗口的话；如果开启的话他会自动识别当前按键是否可点击，不可点击的话就按照刷新间隔刷新界面，直到按键可点击，然后自动点击进入排队</p>
+<p>插件不涉及排队，需要用户手动点击排队，之后进入到这一步后会自动接管。</p>
+<p>所以相对于手动操作，抢票模式的优势主要是选取相关信息、点击按键上会更快一些，而不是说可以提快或者绕过排队</p>
+<p class="tl-guide-space" aria-hidden="true"></p>
+<p class="tl-guide-space" aria-hidden="true"></p>
+<h3 id="RVaFd4mMMoqcZ4xjQmqcxjDinDg">配置注意项</h3>
+<p>商品页url：下面这种页面的网址</p>
+<img src="/help/guides/images/e78333296436af86392a7234.webp" alt="教程截图" width="2000" height="1366" style="width:2000px" loading="lazy" decoding="async">
+<p class="tl-guide-space" aria-hidden="true"></p>
+<p>目标场次可以输入多个场次的信息，输入多个则按照你输入的顺序优先级进行选择，也就是说如果你输入的这些场次都有空位的话，就会优先选择顺序靠前的场次；如果留空，则表示默认全选。</p>
+<img src="/help/guides/images/b13502e457941ca43977f0be.webp" alt="教程截图" width="602" height="108" style="width:602px" loading="lazy" decoding="async">
+<p>票价类别为包含匹配，也就是说下面的话，一般建议填写全部信息，要第一个场的话，就填‘VIP (HK$ 1688.00)’，当然如果你不太确定详细信息的话，填写‘VIP’也是可以的，同理填写1688也可以（如果有多个场信息包含VIP，那这样做，这些多个场都会被包含）</p>
+<p>一般大家提前知道的是票的价格，只输入数字即可，比如下面这种情况，我提前只知道这三种票价，我只要前两种，那我配置里输入 1688；1188 然后回车即可</p>
+<img src="/help/guides/images/aed58e76362f460c756eda89.webp" alt="教程截图" width="2000" height="241" style="width:2000px" loading="lazy" decoding="async">
+<p class="tl-guide-space" aria-hidden="true"></p>
+<p>场次切换间隔表示进入选座页后，如果设置了多个场次或者默认不填写，插件会在不同的场次间切换，进入两个场次之间的间隔即为场次切换间隔；如果只设置了一个场次，那这个场次切换间隔就表示刷新间隔</p>
+<p>当前默认是1，但这个平台会检测短时间内的请求数量，所以如果是抢票的话，这个切得快一点抢到概率会大一点；但如果是捡漏的话，建议大家把这个值调大一些，比如5之类的</p>
+<p class="tl-guide-space" aria-hidden="true"></p>
+<p>单次循环上线表示一次在选座页停留的时长，主要是为了防止捡漏的时候，一直呆在里面可能引起的可能存在的问题（虽然目前还没发现），所以设置了一个上限，到达这个时间上限后，插件会自动退出到商品页，然后重新再进入进入下一轮循环；如果想一直呆在选座页刷的话这个值设置0就可以</p>
+<p class="tl-guide-space" aria-hidden="true"></p>
+<p>如果选择快递取票，需要<strong>提前设置好默认地址</strong></p>
+<p class="tl-guide-space" aria-hidden="true"></p>
+<p class="tl-guide-space" aria-hidden="true"></p>
+<h2 id="CWVxdWGhlowmjLxq26wcDHhanHb">钉钉消息配置</h2>
+<p>主要是用于锁到票时，人不在电脑边上，就算电脑发出了声音也听不到的情况；如果人就在电脑前就没什么必要弄这个了。具体如何配置可跳转下方链接，这个教程里面有讲（偷懒一下）</p>
+<p>钉钉消息只是进行消息提醒，对于插件功能没有任何影响，所以是否接入取决于你们自己</p>
+<a class="tl-guide-attachment" href="https://my.feishu.cn/wiki/YF9Bw6kuyiteERkOfegcKYM1nyb?from=from_copylink#VlkZd0M1bomn3lx3zYQcyGJ2nze" target="_blank" rel="noopener noreferrer"><span><strong>录屏2026-02-21 19.43.02.mov</strong><small>192.74 MB · 在飞书播放</small></span></a>
+<p>如果找不到内部群的webhook与加签，可以看以下视频：</p>
+<a class="tl-guide-attachment" href="https://my.feishu.cn/wiki/YF9Bw6kuyiteERkOfegcKYM1nyb?from=from_copylink#HqC7d4tNZoMCKQxlrR3cA4tinjg" target="_blank" rel="noopener noreferrer"><span><strong>微信视频2026-03-07_225502_987.mp4</strong><small>2.61 MB · 在飞书播放</small></span></a>
+<h2 id="RqgedPuxToCsZkxIQRIc4cX3nMf"><strong><span style="background-color:rgba(222, 224, 227, 0.8)">Telegram Bot</span></strong></h2>
+<blockquote><ul><li>Search <strong>BotFather</strong> in telegram</li></ul><img src="/help/guides/images/22da15154fd282f9c842c432.webp" alt="教程截图" width="628" height="142" style="width:366px" loading="lazy" decoding="async"><ul><li>Send ‘/start’ and ‘/newbot’ and choose the name of the bot.And it will give you a 'Use this token to access the HTTP API:[你的凭据]' like this one. It is <strong>Telegram Bot Token</strong></li><li>In order to activate the bot , you need to<span style="background-color:rgb(255, 165, 61)"> send a message  to your bot （not the BotFather）</span>after you get the Token.</li><li>To get Telegram Chat ID,you should search in you browser 'https://api.telegram.org/bot&lt;your Token&gt;/getUpdates' replace the '&lt;your Token&gt;' by you Telegram Bot Token. And the <span style="background-color:rgb(251, 191, 188)">id （not update_id） </span>below is just the <strong>Telegram Chat ID</strong></li><li>To verify the configuration is correct, you can find an available seat and see whether the telegram bot send message to you </li></ul><p>常见问题：</p><p><strong>1.BotFather会让你命名机器人，随便命名就可以； Telegram Bot Token是从BotFather处获取的，类似于[你的凭据]（这个是我的值，你们的是你们自己显示的）</strong></p><p>2.创建好你的Bot之后，<strong><span style="background-color:rgb(255, 165, 61)">你需要发消息给这个Bot，而不是BotFather</span></strong>，从而激活你的Bot</p><p>3.下一步获取<strong>Telegram Chat ID，这个不是BotFather发给你的，是要去网页端，在网址里面输入才能够获取，如下图所示，如果你输入正确的话，会显示ok：true，否则为false</strong></p><p>4.只显示了ok：true，result：[] ；那就说明你的网址输入没问题，但你的bot还没成功激活，你需要给你的bot随便发几条消息激活一下它；然后就可以获取如下图所示的返回结果了；其中我们要的<strong>Telegram Chat ID是下方显示的id，即8397571358这个值（这个是我的值，你们的是你们自己网页显示的），而不是update_id</strong></p></blockquote>
+<img src="/help/guides/images/77da73575ed43cdf5f8be350.webp" alt="教程截图" width="2000" height="387" style="width:2000px" loading="lazy" decoding="async">
+<h2 id="WCFddrqzcog7BqxWcK8c1Jhonqf">多开浏览器</h2>
+<p>大家如果需要开多个账号一起运行的话需要进行账号隔离（在一个窗口内打开的itp都是一个账号的），点击chrome个人头像，然后选下面的其他chrome个人资料出，点击不同的用户，比如下图中，如果我点击‘用户1’，他就会打开一个和我当前ga这个用户完全隔离的chrome浏览器；同理，你可以创建多个不同的窗口/无需登陆chrome账号</p>
+<img src="/help/guides/images/638550a5cd0195e49e909e3e.webp" alt="教程截图" width="2000" height="1155" style="width:2000px" loading="lazy" decoding="async">
+<h2 id="Kc7cdYR1zo6xSmxiXIjc3txxnBd"><strong>远程控制与支付</strong></h2>
+<p>有的时候人不在电脑边上，但也有可能刷到票；这种情况的话可以手机和电脑上装一个免费的todesk或者向日葵，从而实现手机远程操控电脑；这样的话人在外面，刷到票后手机会收到消息提醒，然后远程操控进行付款即可</p>

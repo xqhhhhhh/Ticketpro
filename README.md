@@ -4,7 +4,7 @@
 
 沿用现有商品站 `https://ticket-pro-website.vercel.app`。服务端部署文件在 `deploy/`；`python -m server.cli check` 可只读检查上线条件，`backup` 保存订单及交付配置，`reconcile` 补发漏通知订单。代码与部署包准备完成不代表已部署或真实支付验收通过。
 
-Ticketlink 教程编辑入口为 `/admin/help/ticketlink`，使用专用密码登录（服务端配置 `TICKETPRO_GUIDE_PASSWORD_HASH`）。可直接编辑正文、插入或粘贴图片，保存草稿后预览，再点击「发布教程」。公开页 `/help/ticketlink` 会读取已发布版本，图片与草稿由现有 API 主机保存并随数据库备份。
+插件教程可在 `/help` 浏览，统一编辑入口为 `/admin/help`。使用专用密码登录（服务端配置 `TICKETPRO_GUIDE_PASSWORD_HASH`）后，选择要编辑的插件。可直接编辑正文、插入或粘贴图片，保存草稿后预览，再点击「发布教程」。每篇公开教程通过 `/help/<商品 ID>` 读取自己的已发布版本。后台新图与草稿由现有 API 主机保存并随数据库备份。
 
 Melon Fleet 代理中心独立教程位于 `/help/melonfleet/proxy`，内容与脚本维护说明见 [代理中心教程页](docs/melon-proxy-guide.md)。
 

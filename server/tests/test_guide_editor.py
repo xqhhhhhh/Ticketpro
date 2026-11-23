@@ -72,3 +72,35 @@ def test_configured_guide_password_is_separate_and_rate_limited(tmp_path):
     for _ in range(6):
         assert client.get(ADMIN, headers=AUTH).status_code == 401
     assert client.get(ADMIN, headers=guide).status_code == 429
+
+
+def test_shared_editor_keeps_guides_separate_and_migrates_existing_ticketlink(tmp_path):
+    import sqlite3
+
+    path = tmp_path / 'guide.sqlite3'
+    with sqlite3.connect(path) as db:
+        db.executescript("""
+          CREATE TABLE ticketlink_guide (id INTEGER PRIMARY KEY, draft_html TEXT, revision INTEGER,
+              published_html TEXT, published_revision INTEGER, published_at TEXT);
+          INSERT INTO ticketlink_guide VALUES (1, '<p>旧草稿</p>', 5, '<p>旧教程</p>', 4, '2026-11-23');
+          CREATE TABLE ticketlink_guide_images (id TEXT PRIMARY KEY, data BLOB, published INTEGER);
+        """)
+    settings = Settings(db=str(path), admin_key='test-guide-admin', tutorials='')
+    client = TestClient(create_app(settings))
+    guides = '/commerce/api/admin/guides'
+    melon = '/commerce/api/help/melon'
+    assert client.get(guides).status_code == 401
+    assert {'ticketlink', 'melon'} <= {item['slug'] for item in client.get(guides, headers=AUTH).json()['guides']}
+    assert client.get(PUBLIC).json()['html'] == '<p>旧教程</p>'
+    assert client.get(guides + '/ticketlink', headers=AUTH).json()['revision'] == 5
+
+    saved = client.post(guides + '/melon/draft', headers=AUTH, json={'revision': 0, 'html': '<p>Melon 教程</p>'})
+    assert saved.json()['revision'] == 1
+    assert client.get(melon).json() == {'html': None}
+    assert client.post(guides + '/melon/publish', headers=AUTH, json={'revision': 1}).status_code == 200
+    assert client.get(melon).json()['html'] == '<p>Melon 教程</p>'
+    assert client.get(PUBLIC).json()['html'] == '<p>旧教程</p>'
+
+    new_client = TestClient(create_app(settings))
+    assert new_client.get(melon).json()['html'] == '<p>Melon 教程</p>'
+    assert new_client.get('/commerce/api/help/nonexistent').status_code == 404

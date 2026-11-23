@@ -1,0 +1,66 @@
+<h2 id="V19QdjKU1oBnhDxbfjocJwu4nSc">二、插件安装教程</h2>
+<p>chrome浏览器下载链接</p>
+<p><a href="https://www.google.com/chrome/" rel="noopener noreferrer">https://www.google.com/chrome/</a></p>
+<p>win不需要设置里进行隐私与安全设置，可以跳过那一部分直接看浏览器内操作（下方视频里是mac电脑，是需要隐私与安全设置进行修改的，win不需要）</p>
+<p>第一部分native-host操作完有个黑色窗口，请大家继续看视频，不用来问我这一步为什么黑色弹窗之后怎么做：之后如果是mac，就按照视频里系统设置里进行隐私与安全的设置；如果是win，直接到浏览器插件导入</p>
+<p>安装插件需要看这个视频以及下面的文字（<span style="color:rgb(216, 57, 49)">都得看</span>）    视频展示的是mac，win需要和下方文字一起看：</p>
+<a class="tl-guide-attachment" href="https://my.feishu.cn/wiki/XoxFwyaqViKZDykiFiTccJk5nrf?from=from_copylink#B3RkdmIndoKYmxxIMo0cCqD0nJc" target="_blank" rel="noopener noreferrer"><span><strong>录屏2026-05-25 18.27.38.mov</strong><small>274.17 MB · 在飞书播放</small></span></a>
+<p><span style="color:rgb(216, 57, 49)">压缩包解压（务必确保已经解压，否则后续可能会有问题）</span>之后里面有两个文件夹，一个是extension，这个就是插件本身，需要导入到浏览器中；还有一个是native-host，这个是用于激活码绑定电脑用的，也就是插件中显示的本机组件（<span style="color:rgb(216, 57, 49)">插件中未显示本机组件已就绪就是因为你还没下载这个</span>）</p>
+<p>浏览器中都是导入extension这个文件夹（看视频），注意就是extension<span style="color:rgb(216, 57, 49)">整个文件夹（在浏览器导入的时候，选这个文件夹有可能会显示内容是空的，不用管，直接选就可以了）</span>，而不是里面任何一个文件或者文件夹</p>
+<p><strong>mac需要双击native-host中的Install-TixcraftHelper-mac.command这个文件,win系统则是双击Install-TixcraftHelper-windows这个文件</strong>。只需要激活之前双击一次就可以</p>
+<p>安装好native-host之后需要重启浏览器（右键退出再启动）</p>
+<img src="/help/guides/images/805d885cd9b1d39e0e649f52.webp" alt="教程截图" width="1944" height="796" style="width:610px" loading="lazy" decoding="async">
+<img src="/help/guides/images/fc2b4a365e1db34a4bfb2283.webp" alt="教程截图" width="1442" height="450" style="width:646px" loading="lazy" decoding="async">
+<p>mac安装好native-host是类似这样的</p>
+<img src="/help/guides/images/27eb05ff967975d7ac9c5416.webp" alt="教程截图" width="1160" height="582" style="width:642px" loading="lazy" decoding="async">
+<p>win安装好native-host（如果不是这样，大概率是你点错文件了，或者你没有解压文件夹）</p>
+<img src="/help/guides/images/1087a2b05b34ae3db57741d4.webp" alt="教程截图" width="992" height="518" style="width:992px" loading="lazy" decoding="async">
+<p class="tl-guide-space" aria-hidden="true"></p>
+<img src="/help/guides/images/3b4618d1d0704b7d5e0dffe5.webp" alt="教程截图" width="620" height="432" style="width:620px" loading="lazy" decoding="async">
+<p class="tl-guide-space" aria-hidden="true"></p>
+<h2 id="Ao0RdYC2bozS7Nxiv14c8zeonEd">三、插件使用教程</h2>
+<p>平台语言用英文</p>
+<h3 id="Yickdj68iojDvNxMYQXczN4pnhg">捡漏模式</h3>
+<p>url输入如下商品页页面的url，然后点击启动之后他会自动跳转到选座页面</p>
+<img src="/help/guides/images/86d772f876e4c2fb658285f8.webp" alt="教程截图" width="2000" height="1350" style="width:568px" loading="lazy" decoding="async">
+<p>插件里可以配置type，也就是下图中的比如VIP，ZONE A；如果不填写的话就是默认都可以；如果输入的话就可以限定某些type，先输入的优先级最高</p>
+<p>如果有可选的座位的话插件会自动勾选好，然后进入下一步，锁到票之后会持续发出声音，提醒你付款；如果没有可选座位的话，会自动一直刷新，直到有座位。</p>
+<p>有些情况会需要输入问题回答才能选座，当前插件已经介入了大模型来回答问题，当然有些问题需要个人信息目前无法回答，出现这种情况的话可以设置模型无法回答时的消息提醒手动输入</p>
+<img src="/help/guides/images/2f6e9a471b695f1bdda58154.webp" alt="教程截图" width="1680" height="312" style="width:1680px" loading="lazy" decoding="async">
+<p class="tl-guide-space" aria-hidden="true"></p>
+<img src="/help/guides/images/396e4a0da82a7abe75e1ad87.webp" alt="教程截图" width="2000" height="1318" style="width:718px" loading="lazy" decoding="async">
+<h3 id="Ky9gdFyj1oFOaxxItOscZ1e6nms">接管模式</h3>
+<p>接管模式主要是针对选座页的，提前开启，到达选座页后会自动接管后续操作。一般公售之类的可以用这个模式，或者手动进入到选座页在开启这个模式。</p>
+<h2 id="R9Q2dMx7AoLOaQx3prXc5wJonAb">四、插件更新教程</h2>
+<blockquote><p>在使用过程中遇到问题和Bug时，可以回到本文档检查自己是否下载的是<strong>最新版本</strong>的插件，并查阅 <strong>六、更新日志</strong> 看自己遇到的问题是否在新版本中已经被解决。</p></blockquote>
+<p>1.删除旧的dist压缩包和dist文件夹。</p>
+<p>2.在Chrome浏览器中，点击插件右侧三个点，选择[从Chrome中移除]</p>
+<img src="/help/guides/images/f1435ff70a0ef4618fe32870.webp" alt="教程截图" width="1507" height="1004" style="width:1507px" loading="lazy" decoding="async">
+<p>3.在本文档 <strong>一、插件安装包下载</strong> 中下载最新的dist压缩包并解压。</p>
+<p>4.余下步骤详见<strong>二、插件安装教程</strong>，流程相同。</p>
+<blockquote><p>具体可见视频教程</p></blockquote>
+<a class="tl-guide-attachment" href="https://my.feishu.cn/wiki/XoxFwyaqViKZDykiFiTccJk5nrf?from=from_copylink#EAJDdv9c4o7XYixdSllcBoJxnVd" target="_blank" rel="noopener noreferrer"><span><strong>录屏2026-02-21 14.52.46.mov</strong><small>82.71 MB · 在飞书播放</small></span></a>
+<p class="tl-guide-space" aria-hidden="true"></p>
+<hr>
+<h2 id="NoFRdioxYo18XexpSsscCWO7nph">五、其他教程</h2>
+<h3 id="AoCRdaLx8oTJDGxLo7fcqHJdngh">1.钉钉消息接入：</h3>
+<p>钉钉消息只是进行消息提醒，对于插件功能没有任何影响，所以是否接入取决于你们自己</p>
+<a class="tl-guide-attachment" href="https://my.feishu.cn/wiki/XoxFwyaqViKZDykiFiTccJk5nrf?from=from_copylink#GLr5dR7VboIcBexQCp9cKv9tnEg" target="_blank" rel="noopener noreferrer"><span><strong>录屏2026-02-21 19.43.02.mov</strong><small>192.74 MB · 在飞书播放</small></span></a>
+<p>如果找不到内部群的webhook与加签，可以看以下视频：</p>
+<a class="tl-guide-attachment" href="https://my.feishu.cn/wiki/XoxFwyaqViKZDykiFiTccJk5nrf?from=from_copylink#Uaw1dJm1ooZb1AxXuC6ctzZanMf" target="_blank" rel="noopener noreferrer"><span><strong>微信视频2026-03-07_225502_987.mp4</strong><small>2.61 MB · 在飞书播放</small></span></a>
+<p>接入之后可以找个有空位的场测试一下</p>
+<h3 id="PeesdjTjyoKDeUxUybic0eEjncb"><strong><span style="background-color:rgba(222, 224, 227, 0.8)">2.Telegram Bot</span></strong></h3>
+<blockquote><ul><li>Search <strong>BotFather</strong> in telegram</li></ul><img src="/help/guides/images/22da15154fd282f9c842c432.webp" alt="教程截图" width="628" height="142" style="width:366px" loading="lazy" decoding="async"><ul><li>Send ‘/start’ and ‘/newbot’ and choose the name of the bot.And it will give you a 'Use this token to access the HTTP API:[你的凭据]' like this one. It is <strong>Telegram Bot Token</strong></li><li>In order to activate the bot , you need to<span style="background-color:rgb(255, 165, 61)"> send a message  to your bot （not the BotFather）</span>after you get the Token.</li><li>To get Telegram Chat ID,you should search in you browser 'https://api.telegram.org/bot&lt;your Token&gt;/getUpdates' replace the '&lt;your Token&gt;' by you Telegram Bot Token. And the <span style="background-color:rgb(251, 191, 188)">id （not update_id） </span>below is just the <strong>Telegram Chat ID</strong></li><li>To verify the configuration is correct, you can find an available seat and see whether the telegram bot send message to you </li></ul><p>常见问题：</p><p><strong>1.BotFather会让你命名机器人，随便命名就可以； Telegram Bot Token是从BotFather处获取的，类似于[你的凭据]（这个是我的值，你们的是你们自己显示的）</strong></p><p>2.创建好你的Bot之后，<strong><span style="background-color:rgb(255, 165, 61)">你需要发消息给这个Bot，而不是BotFather</span></strong>，从而激活你的Bot</p><p>3.下一步获取<strong>Telegram Chat ID，这个不是BotFather发给你的，是要去网页端，在网址里面输入才能够获取，如下图所示，如果你输入正确的话，会显示ok：true，否则为false</strong></p><p>4.只显示了ok：true，result：[] ；那就说明你的网址输入没问题，但你的bot还没成功激活，你需要给你的bot随便发几条消息激活一下它；然后就可以获取如下图所示的返回结果了；其中我们要的<strong>Telegram Chat ID是下方显示的id，即8397571358这个值（这个是我的值，你们的是你们自己网页显示的），而不是update_id</strong></p></blockquote>
+<img src="/help/guides/images/77da73575ed43cdf5f8be350.webp" alt="教程截图" width="2000" height="387" style="width:2000px" loading="lazy" decoding="async">
+<h3 id="ExBUde5vdo5WTMxK4ahcf4uxn0c"><strong>3.多开浏览器：chrome多账号运行——浏览器多开：</strong></h3>
+<p><span style="color:rgb(216, 57, 49)">这是一个很万金油的方法，有的时候插件无法正常运行是因为浏览器的缘故，通过这个方法可以新打开纯净的浏览器，所以很多时候新开一个浏览器，在这个浏览器中导入插件（因为是全新的，所以得重新导入插件，输入原来那个激活码即可），就可以解决很多问题</span></p>
+<p>大家如果需要开多个账号一起运行的话需要进行账号隔离（在一个窗口内打开的itp都是一个账号的），点击chrome个人头像，然后选下面的其他chrome个人资料出，点击不同的用户，比如下图中，如果我点击‘用户1’，他就会打开一个和我当前ga这个用户完全隔离的chrome浏览器；同理，你可以创建多个不同的窗口/无需登陆chrome账号</p>
+<img src="/help/guides/images/638550a5cd0195e49e909e3e.webp" alt="教程截图" width="2000" height="1155" style="width:2000px" loading="lazy" decoding="async">
+<p>查看是否隔离成功：</p>
+<p>浏览器链接中输入chrome://version，查看<strong>个人资料路径/</strong><strong><code>Profile Path</code></strong><strong>是否不同</strong></p>
+<p>如下图所示，两个个人资料路径的最后分别为Profile 1和Profile 2，则表示完全不同的两个浏览器</p>
+<img src="/help/guides/images/0548f53bfa767f6d2de57ea5.webp" alt="教程截图" width="2000" height="598" style="width:2000px" loading="lazy" decoding="async">
+<p>如果上述方法没法隔离开，可以在终端中输入<br></p>
+<pre><code>open -na "Google Chrome" --args --user-data-dir="$HOME/chrome-itp-a"<br>open -na "Google Chrome" --args --user-data-dir="$HOME/chrome-itp-b"</code></pre>
+<pre><code>Start-Process chrome -ArgumentList '--user-data-dir="%USERPROFILE%\chrome-itp-a"'<br>Start-Process chrome -ArgumentList '--user-data-dir="%USERPROFILE%\chrome-itp-b"'</code></pre>
+<p class="tl-guide-space" aria-hidden="true"></p>

@@ -19,18 +19,25 @@ from starlette.concurrency import run_in_threadpool
 from .store import ShopError
 
 ADMIN_PATH = '/api/admin/ticketlink'
-PUBLIC_PATH = '/api/help/ticketlink'
 DRAFT_LIMIT = 256 * 1024
 IMAGE_LIMIT = 5 * 1024 * 1024
 IMAGE_QUOTA = 40 * 1024 * 1024
-WRITE_LIMITS = {
-    ADMIN_PATH + '/draft': DRAFT_LIMIT,
-    ADMIN_PATH + '/images': IMAGE_LIMIT,
-}
+GUIDE_ADMIN_PATH = '/api/admin/guides'
+GUIDE_SLUG = r'[a-z0-9]+(?:-[a-z0-9]+)*'
+TOTAL_IMAGE_QUOTA = 100 * 1024 * 1024
+
+
+def guide_write_limit(path):
+    match = re.fullmatch(rf'(?:{ADMIN_PATH}|{GUIDE_ADMIN_PATH}/{GUIDE_SLUG})/(draft|images)', path)
+    if not match:
+        return 16384
+    return DRAFT_LIMIT if match[1] == 'draft' else IMAGE_LIMIT
+
+
 HEADINGS = {'h2', 'h3', 'h4', 'h5'}
 IMAGE_ID = re.compile(r'[a-f0-9]{64}')
 HEADING_ID = re.compile(r'[A-Za-z0-9][A-Za-z0-9_-]{0,90}')
-STATIC_IMAGE = re.compile(r'/help/ticketlink/images/[a-z0-9-]+\.(?:png|jpg|webp)')
+STATIC_IMAGE = re.compile(r'/help/(?:ticketlink|guides)/images/[a-z0-9-]+\.(?:png|jpg|webp)')
 
 
 def allowed_attribute(tag, name, value):
@@ -179,112 +186,147 @@ def guide_authenticator(settings):
     return authenticate
 
 
-def build_router(store, settings):
+def build_router(store, settings, catalog):
     authenticate = guide_authenticator(settings)
     router = APIRouter()
+    guides = {item['id']: item['name'] for item in catalog}
     with store.connection(write=True) as db:
-        db.execute('''CREATE TABLE IF NOT EXISTS ticketlink_guide (
-            id INTEGER PRIMARY KEY CHECK(id=1), draft_html TEXT, revision INTEGER NOT NULL DEFAULT 0,
+        db.execute('''CREATE TABLE IF NOT EXISTS guide_documents (
+            slug TEXT PRIMARY KEY, draft_html TEXT, revision INTEGER NOT NULL DEFAULT 0,
             published_html TEXT, published_revision INTEGER, published_at TEXT)''')
-        db.execute('INSERT OR IGNORE INTO ticketlink_guide(id) VALUES (1)')
-        db.execute('''CREATE TABLE IF NOT EXISTS ticketlink_guide_images (
-            id TEXT PRIMARY KEY, data BLOB NOT NULL, published INTEGER NOT NULL DEFAULT 0)''')
+        db.execute('''CREATE TABLE IF NOT EXISTS guide_images (
+            slug TEXT NOT NULL REFERENCES guide_documents(slug), id TEXT NOT NULL,
+            data BLOB NOT NULL, published INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(slug,id))''')
+        legacy_exists = db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='ticketlink_guide'").fetchone()
+        if legacy_exists:
+            migrated = db.execute('''INSERT OR IGNORE INTO guide_documents
+                SELECT 'ticketlink',draft_html,revision,published_html,published_revision,published_at
+                FROM ticketlink_guide WHERE id=1''').rowcount
+            if migrated:
+                db.execute('''INSERT OR IGNORE INTO guide_images
+                    SELECT 'ticketlink',id,data,published FROM ticketlink_guide_images''')
+        db.executemany('INSERT OR IGNORE INTO guide_documents(slug) VALUES (?)', ((slug,) for slug in guides))
 
-    def status(db):
+    def ensure_guide(slug):
+        if slug not in guides:
+            raise ShopError('guide_not_found', 404)
+
+    def status(db, slug):
         return dict(db.execute('''SELECT draft_html AS html, revision, published_revision, published_at
-                                  FROM ticketlink_guide WHERE id=1''').fetchone())
+                                  FROM guide_documents WHERE slug=?''', (slug,)).fetchone())
 
-    def save(payload):
+    def save(slug, payload):
         html = CLEANER.clean(payload.html)
         fragment = GuideFragment(html)
         if not fragment.has_content:
             raise ShopError('guide_empty_document', 422)
         with store.connection(write=True) as db:
-            current = status(db)
+            current = status(db, slug)
             if current['revision'] != payload.revision:
                 raise ShopError('guide_revision_conflict', 409)
-            available = {row['id'] for row in db.execute('SELECT id FROM ticketlink_guide_images')}
+            available = {row['id'] for row in db.execute('SELECT id FROM guide_images WHERE slug=?', (slug,))}
             if not fragment.images <= available:
                 raise ShopError('guide_missing_image', 422)
             if current['html'] != html:
-                db.execute('UPDATE ticketlink_guide SET draft_html=?, revision=revision+1 WHERE id=1', (html,))
-            return status(db)
+                db.execute('UPDATE guide_documents SET draft_html=?, revision=revision+1 WHERE slug=?', (html, slug))
+            return status(db, slug)
 
-    def publish(payload):
+    def publish(slug, payload):
         with store.connection(write=True) as db:
-            current = status(db)
+            current = status(db, slug)
             if payload.revision != current['revision']:
                 raise ShopError('guide_revision_conflict', 409)
             if current['html'] is None:
                 raise ShopError('guide_empty_document', 422)
             if current['published_revision'] != current['revision']:
                 images = GuideFragment(current['html']).images
-                db.execute('UPDATE ticketlink_guide_images SET published=0 WHERE published=1')
-                db.executemany('UPDATE ticketlink_guide_images SET published=1 WHERE id=?',
-                               ((image_id,) for image_id in images))
-                db.execute('''UPDATE ticketlink_guide
-                    SET published_html=draft_html, published_revision=revision, published_at=? WHERE id=1''',
-                           (datetime.now(timezone.utc).isoformat(),))
-            return status(db)
+                db.execute('UPDATE guide_images SET published=0 WHERE slug=? AND published=1', (slug,))
+                db.executemany('UPDATE guide_images SET published=1 WHERE slug=? AND id=?',
+                               ((slug, image_id) for image_id in images))
+                db.execute('''UPDATE guide_documents
+                    SET published_html=draft_html, published_revision=revision, published_at=? WHERE slug=?''',
+                           (datetime.now(timezone.utc).isoformat(), slug))
+            return status(db, slug)
 
-    def store_image(data):
+    def store_image(slug, data):
         content = encode_image(data)
         image_id = sha256(content).hexdigest()
         with store.connection(write=True) as db:
-            if db.execute('SELECT 1 FROM ticketlink_guide_images WHERE id=?', (image_id,)).fetchone():
+            if db.execute('SELECT 1 FROM guide_images WHERE slug=? AND id=?', (slug, image_id)).fetchone():
                 return {'id': image_id}
-            used = db.execute('SELECT COALESCE(SUM(length(data)), 0) FROM ticketlink_guide_images').fetchone()[0]
-            if used + len(content) > IMAGE_QUOTA:
+            used = db.execute('SELECT COALESCE(SUM(length(data)), 0) FROM guide_images WHERE slug=?', (slug,)).fetchone()[0]
+            total = db.execute('SELECT COALESCE(SUM(length(data)), 0) FROM guide_images').fetchone()[0]
+            if used + len(content) > IMAGE_QUOTA or total + len(content) > TOTAL_IMAGE_QUOTA:
                 raise ShopError('guide_image_quota', 413)
-            db.execute('INSERT INTO ticketlink_guide_images(id, data) VALUES (?, ?)', (image_id, content))
+            db.execute('INSERT INTO guide_images(slug,id,data) VALUES (?,?,?)', (slug, image_id, content))
         return {'id': image_id}
 
-    def image_response(image_id, private=False):
+    def image_response(slug, image_id, private=False):
+        ensure_guide(slug)
         if not IMAGE_ID.fullmatch(image_id):
             raise ShopError('guide_missing_image', 404)
         with store.connection() as db:
-            row = db.execute('SELECT data FROM ticketlink_guide_images WHERE id=? AND (published=1 OR ?)',
-                             (image_id, private)).fetchone()
+            row = db.execute('SELECT data FROM guide_images WHERE slug=? AND id=? AND (published=1 OR ?)',
+                             (slug, image_id, private)).fetchone()
         if row is None:
             raise ShopError('guide_missing_image', 404)
         return Response(row['data'], media_type='image/webp')
 
-    @router.get(PUBLIC_PATH)
-    def public_guide():
+    @router.get('/api/help/{slug}')
+    def public_guide(slug: str):
+        ensure_guide(slug)
         with store.connection() as db:
-            return dict(db.execute('SELECT published_html AS html FROM ticketlink_guide WHERE id=1').fetchone())
+            row = db.execute('SELECT published_html AS html FROM guide_documents WHERE slug=?', (slug,)).fetchone()
+            return {'html': row['html']}
 
-    @router.get(PUBLIC_PATH + '/images/{image_id}')
-    def public_image(image_id: str):
-        return image_response(image_id)
+    @router.get('/api/help/{slug}/images/{image_id}')
+    def public_image(slug: str, image_id: str):
+        return image_response(slug, image_id)
 
-    @router.get(ADMIN_PATH)
-    def admin_guide(request: Request):
+    @router.get(GUIDE_ADMIN_PATH)
+    def guide_index(request: Request):
         authenticate(request)
         with store.connection() as db:
-            return status(db)
+            rows = db.execute('SELECT slug, revision, published_revision FROM guide_documents').fetchall()
+            states = {row['slug']: dict(row) for row in rows}
+        return {'guides': [{'slug': slug, 'name': name, **states[slug]} for slug, name in guides.items()]}
 
-    @router.get(ADMIN_PATH + '/images/{image_id}')
-    def admin_image(image_id: str, request: Request):
+    @router.get(GUIDE_ADMIN_PATH + '/{slug}')
+    @router.get(ADMIN_PATH, include_in_schema=False)
+    def admin_guide(request: Request, slug: str = 'ticketlink'):
         authenticate(request)
-        return image_response(image_id, private=True)
+        ensure_guide(slug)
+        with store.connection() as db:
+            return status(db, slug)
 
-    @router.post(ADMIN_PATH + '/draft')
-    async def save_draft(request: Request):
+    @router.get(GUIDE_ADMIN_PATH + '/{slug}/images/{image_id}')
+    @router.get(ADMIN_PATH + '/images/{image_id}', include_in_schema=False)
+    def admin_image(image_id: str, request: Request, slug: str = 'ticketlink'):
+        authenticate(request)
+        return image_response(slug, image_id, private=True)
+
+    @router.post(GUIDE_ADMIN_PATH + '/{slug}/draft')
+    @router.post(ADMIN_PATH + '/draft', include_in_schema=False)
+    async def save_draft(request: Request, slug: str = 'ticketlink'):
         await run_in_threadpool(authenticate, request)
+        ensure_guide(slug)
         payload = await read_document(request, Draft, DRAFT_LIMIT)
-        return await run_in_threadpool(save, payload)
+        return await run_in_threadpool(save, slug, payload)
 
-    @router.post(ADMIN_PATH + '/publish')
-    async def publish_guide(request: Request):
+    @router.post(GUIDE_ADMIN_PATH + '/{slug}/publish')
+    @router.post(ADMIN_PATH + '/publish', include_in_schema=False)
+    async def publish_guide(request: Request, slug: str = 'ticketlink'):
         await run_in_threadpool(authenticate, request)
+        ensure_guide(slug)
         payload = await read_document(request, Revision, 1024)
-        return await run_in_threadpool(publish, payload)
+        return await run_in_threadpool(publish, slug, payload)
 
-    @router.post(ADMIN_PATH + '/images')
-    async def upload_image(request: Request):
+    @router.post(GUIDE_ADMIN_PATH + '/{slug}/images')
+    @router.post(ADMIN_PATH + '/images', include_in_schema=False)
+    async def upload_image(request: Request, slug: str = 'ticketlink'):
         await run_in_threadpool(authenticate, request)
+        ensure_guide(slug)
         data = await read_limited(request, IMAGE_LIMIT)
-        return await run_in_threadpool(store_image, data)
+        return await run_in_threadpool(store_image, slug, data)
 
     return router

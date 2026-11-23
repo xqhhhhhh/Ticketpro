@@ -93,6 +93,19 @@
 .tled .tled-feedback { padding: 8px clamp(16px, 4vw, 48px); color: #254375; background: #e2eaff; }
 .tled .tled-error { color: #a1182b; }
 .tled .tled-feedback.tled-error { background: #ffedf0; }
-.tled > .tl-guide { min-height: 75vh; --guide-header-height: 110px; }
-.tled > .tl-guide .tl-guide-header { position: static; min-height: 54px; }
-.tled > .tl-guide .tl-guide-header span { color: #566681; font-size: 13px; }
+
+.tled-guide-picker { display: grid; max-width: 100%; gap: 4px; }
+.tled-guide-picker label { color: #566681; font-size: 12px; }
+.tled-guide-picker select {
+  max-width: 100%;
+  padding: 6px 9px;
+  border: 1px solid #d6e0ef;
+  border-radius: 6px;
+  background: #fff;
+  color: #192238;
+  font: inherit;
+  font-weight: 600;
+}
+.tled .tl-guide { min-height: 75vh; --guide-header-height: 134px; }
+.tled .tl-guide .tl-guide-header { position: static; min-height: 54px; }
+.tled .tl-guide .tl-guide-header span { color: #566681; font-size: 13px; }
